@@ -15,4 +15,7 @@
     <string name="game">Game</string>
     <string name="stats">Stats</string>
     <string name="leaderboard">Leaderboard</string>
+    <string name="welcome">Welcome,</string>
+    <string name="today_s_game_pick">Today\'s game pick</string>
+    <string name="featured">Featured</string>
 </resources>

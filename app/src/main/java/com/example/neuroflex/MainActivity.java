@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Header
         button =  findViewById(R.id.logout);
-        textView = findViewById(R.id.user_details);
+//        textView = findViewById(R.id.user_details);
         TextView textViewName = findViewById(R.id.display_name);
 
         // Navigation
@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            textView.setText(user.getEmail());
+            // Display user details
+//            textView.setText(user.getEmail());
 
             String userId = user.getUid();
 
