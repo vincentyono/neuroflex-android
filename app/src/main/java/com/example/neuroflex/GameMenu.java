@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -13,6 +15,18 @@ public class GameMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_menu);
+
+        // Get the ImageView
+        ImageView imageViewGame2 = findViewById(R.id.imageViewGame2);
+
+        // Set the OnClickListener
+        imageViewGame2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GameMenu.this, MemoryGameActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);

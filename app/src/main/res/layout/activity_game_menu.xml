@@ -53,17 +53,16 @@
                 android:layout_marginTop="25dp"
                 android:layout_height="match_parent">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:background="@drawable/game_background"
                     android:id="@+id/imageViewGame"
                     android:layout_width="375dp"
                     android:layout_height="150dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/game_math" />
+                    android:src="@drawable/game_math" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -86,17 +85,16 @@
                 android:layout_marginTop="25dp"
                 android:layout_height="match_parent">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:background="@drawable/game_background"
                     android:id="@+id/imageViewGame2"
                     android:layout_width="375dp"
                     android:layout_height="150dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/game_memory" />
+                    android:src="@drawable/game_memory" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -120,17 +118,16 @@
                 android:layout_marginTop="25dp"
                 android:layout_height="match_parent">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:background="@drawable/game_background"
                     android:id="@+id/imageViewGame3"
                     android:layout_width="375dp"
                     android:layout_height="150dp"
-                    android:src="@tools:sample/avatars"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:srcCompat="@drawable/game_language" />
+                    android:src="@drawable/game_language" />
 
                 <TextView
                     android:id="@+id/textViewOverlay"

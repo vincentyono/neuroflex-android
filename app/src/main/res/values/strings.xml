@@ -18,4 +18,7 @@
     <string name="welcome">Welcome,</string>
     <string name="today_s_game_pick">Today\'s game pick</string>
     <string name="featured">Featured</string>
+    <string name="button_function">Click to flip the card</string>
+    <string name="card_back">cardBack</string>
+
 </resources>
