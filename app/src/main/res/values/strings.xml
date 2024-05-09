@@ -3,10 +3,10 @@
     <string name="login">Login</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="register">Register</string>
+    <string name="register">Create an account</string>f
     <string name="full_name">Full name</string>
-    <string name="click_to_login">Click to login</string>
-    <string name="click_to_register">Click to register</string>
+    <string name="click_to_login">Already have an account</string>
+    <string name="click_to_register">Create a new account</string>
     <string name="logout">Logout</string>
     <string name="name_here">Name here.</string>
     <string name="open_nav">Open Navigation Drawer</string>
@@ -20,5 +20,12 @@
     <string name="featured">Featured</string>
     <string name="button_function">Click to flip the card</string>
     <string name="card_back">cardBack</string>
+    <string name="neuroflex">NeuroFlex</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login_with_email">Login with email</string>
+    <string name="create_account">Create account</string>
+    <string name="desc_reg">Create an account to begin training your brain and save progress.</string>
+    <string name="descLogin">Welcome back! We have missed you.</string>
+    <string name="forgot_password">Forgot password</string>
 
 </resources>
