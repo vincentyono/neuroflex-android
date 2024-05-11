@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_blue">
+
+    <!-- Game Mode Title Text -->
+    <TextView
+        android:id="@+id/textGameMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Memory \nPlay"
+        android:textSize="40sp"
+        android:textColor="@android:color/white"
+        android:textStyle="normal"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="30dp"/>
+
+    <!-- Select Difficulty Text -->
+    <TextView
+        android:id="@+id/textSelectDifficulty"
+        android:layout_below="@id/textGameMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select difficulty"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:textStyle="normal"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="30dp"/>
+
+    <!-- Difficulty Boxes -->
+    <LinearLayout
+        android:id="@+id/difficultyBoxes"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/textSelectDifficulty"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
+
+        <!-- Easy Game Mode -->
+        <LinearLayout
+            android:id="@+id/easyBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners_green"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Easy"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Medium Game Mode -->
+        <LinearLayout
+            android:id="@+id/mediumBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners_orange"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Medium"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Hard Game Mode -->
+        <LinearLayout
+            android:id="@+id/hardBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners_red"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hard"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Current Rank Box -->
+    <LinearLayout
+        android:id="@+id/bigBox"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/difficultyBoxes"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_corners"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current Rank"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beginner"
+            android:textSize="25sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="3dp"/>
+
+    </LinearLayout>
+
+    <!-- Score and Objective-->
+    <LinearLayout
+        android:id="@+id/scoreObjective"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:layout_below="@id/bigBox"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
+
+        <!-- Best Score Box -->
+        <LinearLayout
+            android:id="@+id/scoreBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Best Score"
+                android:textSize="18sp"
+                android:textColor="#FF7A00"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/trophy_icon"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="860"
+                    android:textSize="40sp"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Objective Box -->
+        <LinearLayout
+            android:id="@+id/objectiveBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Objective"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- How to play Box -->
+    <LinearLayout
+        android:id="@+id/howToBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/scoreObjective"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_corners_outline"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="How to play"
+            android:textSize="22sp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="20dp"/>
+
+    </LinearLayout>
+
+    <!-- Play Now Button -->
+    <Button
+        android:id="@+id/btnPlayNow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="Play Now"
+        android:layout_below="@id/howToBox"
+        android:textSize="25sp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/white"/>
+
+</RelativeLayout>
