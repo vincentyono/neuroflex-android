@@ -17,9 +17,18 @@ public class GameMenu extends AppCompatActivity {
         setContentView(R.layout.activity_game_menu);
 
         // Get the ImageView
+        ImageView imageViewGame = findViewById(R.id.imageViewGame);
         ImageView imageViewGame2 = findViewById(R.id.imageViewGame2);
 
         // Set the OnClickListener
+        imageViewGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GameMenu.this, MathPuzzleActivity.class);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                startActivity(intent);
+            }
+        });
         imageViewGame2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
