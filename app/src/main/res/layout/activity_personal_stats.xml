@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PersonalStats">
+
+    <!-- RelativeLayout ensures that the BottomNavigationView stays at the bottom -->
+
+    <!-- Layout for other content that needs to be above the BottomNavigationView -->
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bottom_background"
+        android:elevation="2dp"
+        app:itemIconSize="37dp"
+        app:itemIconTint="@drawable/item_selector"
+        app:itemRippleColor="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_menu" />
+
+    <TextView
+        android:id="@+id/textPerformance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Performance"
+        android:textSize="40sp"
+        android:textColor="@android:color/black"
+        android:textStyle="normal"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="30dp"/>
+
+    <LinearLayout
+        android:id="@+id/scoreBox"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/textPerformance"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_corners"
+        android:orientation="vertical"
+        android:elevation="8dp">
+
+        <!-- Contents of the big box: Score Evolution -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score Evolution"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scoreBox"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:clipToPadding="false"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp" />
+
+</RelativeLayout>
