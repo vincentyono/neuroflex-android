@@ -1,39 +1,32 @@
 package com.example.neuroflex;
 
-public class PersonalStats {
-    private int speed;
-    private int accuracy;
-    private int time;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
+import java.util.List;
 
-    public PersonalStats(int speed, int accuracy, int time) {
-        this.speed = speed;
-        this.accuracy = accuracy;
-        this.time = time;
-    }
+public class PersonalStats extends AppCompatActivity {
 
-    // Getters and setters for the properties
+    private RecyclerView recyclerView;
+    private BarGraphAdapter adapter;
 
-    public int getSpeed() {
-        return speed;
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_personal_stats);
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    public int getAccuracy() {
-        return accuracy;
-    }
+        // Sample data for bar graphs
+        List<BarGraphItem> data = new ArrayList<>();
+        data.add(new BarGraphItem("Speed", 75));
+        data.add(new BarGraphItem("Accuracy", 90));
+        data.add(new BarGraphItem("Time", 80));
 
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
+        adapter = new BarGraphAdapter(data);
+        recyclerView.setAdapter(adapter);
     }
 }
