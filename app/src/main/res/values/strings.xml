@@ -32,9 +32,5 @@
     <string name="math_puzzle_n_question">1/10</string>
     <string name="pause_button_description">Pause game</string>
     <string name="help_button_description">Get help!</string>
-    <string name="math_question_int_a">a</string>
-    <string name="math_question_int_b">b</string>
-    <string name="math_question_operator">+</string>
-    <string name="math_question_int_c">c</string>
-    <string name="math_question_equal">=</string>
+    <string name="math_question">99 + 99 = </string>
 </resources>

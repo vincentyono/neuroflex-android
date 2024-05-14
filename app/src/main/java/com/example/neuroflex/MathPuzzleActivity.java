@@ -19,9 +19,10 @@ public class MathPuzzleActivity extends AppCompatActivity {
     private ArrayList<MathQuestion> _mathQuestions;
     private RecyclerView _questions;
     private TextView _questionNumber;
-    private TextView _score;
+    private TextView _scoreView;
     private ImageView _pauseBtn;
     private ImageView _helpBtn;
+    private int _score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MathPuzzleActivity extends AppCompatActivity {
         _mathQuestions = this.generateQuestion(Difficulty.EASY, 9);
         _questions = findViewById(R.id.question_container);
         _questionNumber = findViewById(R.id.question_number);
-        _score = findViewById(R.id.score_value);
+        _scoreView = findViewById(R.id.score_value);
 
         _pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +45,7 @@ public class MathPuzzleActivity extends AppCompatActivity {
         _helpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
 
@@ -63,5 +65,10 @@ public class MathPuzzleActivity extends AppCompatActivity {
        }
 
        return temp;
+    }
+
+    public void addScore() {
+        this._score += 100;
+        this._scoreView.setText(this._score);
     }
 }
