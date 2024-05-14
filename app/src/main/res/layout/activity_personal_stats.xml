@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".PersonalStats">
 
-    <!-- RelativeLayout ensures that the BottomNavigationView stays at the bottom -->
-
-    <!-- Layout for other content that needs to be above the BottomNavigationView -->
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -30,7 +26,6 @@
         android:text="Performance"
         android:textSize="40sp"
         android:textColor="@android:color/black"
-        android:textStyle="normal"
         android:layout_marginTop="70dp"
         android:layout_marginLeft="30dp"/>
 
@@ -46,7 +41,6 @@
         android:orientation="vertical"
         android:elevation="8dp">
 
-        <!-- Contents of the big box: Score Evolution -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,13 +51,56 @@
             android:layout_marginTop="10dp"/>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <LinearLayout
+        android:id="@+id/chartContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/scoreBox"
+        android:orientation="horizontal"
         android:layout_marginTop="20dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"/>
+        android:layout_marginEnd="30dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textLabel1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"
+                android:text="Label 1" />
+
+            <TextView
+                android:id="@+id/textLabel2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="8dp"
+                android:text="Label 2" />
+
+            <TextView
+                android:id="@+id/textLabel3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:text="Label 3" />
+
+        </LinearLayout>
+
+        <com.github.mikephil.charting.charts.HorizontalBarChart
+            android:id="@+id/barChart"
+            android:layout_width="0dp"
+            android:layout_height="320dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp" />
+
+    </LinearLayout>
 
 </RelativeLayout>
