@@ -78,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
             String userId = user.getUid();
 
             // Get the user's name
-            db.collection("users").document(userId).get()
+            db.collection("USERS").document(userId).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                String name = document.getString("name");
+                                String name = document.getString("NAME");
                                 textViewName.setText(name); // Set the user's name to TextView
                             } else {
                                 Log.d("MainActivity", "No such document");
