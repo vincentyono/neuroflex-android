@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F3FF"
+    tools:context=".Result">
+
+    <!-- Result Box -->
+    <LinearLayout
+        android:id="@+id/resultBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/round_corners"
+        android:elevation="6dp"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <!-- Your Score -->
+        <TextView
+            android:id="@+id/textYourScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Score"
+            android:textColor="#FF7A00"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            />
+
+        <!-- Score Number -->
+        <TextView
+            android:id="@+id/textScoreNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="860"
+            android:textColor="@android:color/black"
+            android:textSize="70sp"
+            android:textStyle="normal" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
+
+            <!-- Trophy image -->
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/trophy_icon"
+                android:layout_marginEnd="10dp"/>
+
+            <!-- Vertical LinearLayout for Best Score Text and Num -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Best Score Text -->
+                <TextView
+                    android:id="@+id/textBestScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your Best Score"
+                    android:textColor="#FF7A00"
+                    android:textSize="15sp" />
+
+                <!-- Best Score Num -->
+                <TextView
+                    android:id="@+id/textBestNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="860"
+                    android:textColor="@android:color/black"
+                    android:textSize="15sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Next Button -->
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/resultBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Next"
+        android:textSize="20sp"
+        android:backgroundTint="#FF7A00" />
+
+</RelativeLayout>
