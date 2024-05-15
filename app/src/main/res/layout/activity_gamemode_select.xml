@@ -28,85 +28,71 @@
         android:layout_marginStart="30dp"/>
 
     <!-- Difficulty Boxes -->
-    <LinearLayout
-        android:id="@+id/difficultyBoxes"
+    <RadioGroup
+        android:id="@+id/difficultyRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textSelectDifficulty"
-        android:orientation="horizontal"
         android:layout_marginTop="15dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp">
+        android:layout_marginEnd="30dp"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
         <!-- Easy Game Mode -->
-        <LinearLayout
-            android:id="@+id/easyBox"
+        <RadioButton
+            android:id="@+id/btnEasy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/round_corners_green"
-            android:layout_marginEnd="12dp"
-            android:orientation="vertical"
-            android:paddingVertical="10dp"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Easy"
-                android:textSize="18sp"
-                android:textColor="@android:color/white"/>
-
-        </LinearLayout>
+            android:gravity="center"
+            android:text="Easy"
+            android:background="@drawable/easy_button"
+            android:textColor="@android:color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginEnd="8dp"
+            android:button="@null"/>
 
         <!-- Medium Game Mode -->
-        <LinearLayout
-            android:id="@+id/mediumBox"
+        <RadioButton
+            android:id="@+id/btnMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/round_corners_orange"
-            android:layout_marginEnd="12dp"
-            android:orientation="vertical"
-            android:paddingVertical="10dp"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Medium"
-                android:textSize="18sp"
-                android:textColor="@android:color/white"/>
-
-        </LinearLayout>
+            android:gravity="center"
+            android:text="Medium"
+            android:background="@drawable/medium_button"
+            android:textColor="@android:color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:button="@null"/>
 
         <!-- Hard Game Mode -->
-        <LinearLayout
-            android:id="@+id/hardBox"
+        <RadioButton
+            android:id="@+id/btnHard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/round_corners_red"
-            android:orientation="vertical"
-            android:paddingVertical="10dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:text="Hard"
+            android:background="@drawable/hard_button"
+            android:textColor="@android:color/white"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_marginStart="8dp"
+            android:button="@null"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hard"
-                android:textSize="18sp"
-                android:textColor="@android:color/white"/>
-
-        </LinearLayout>
-    </LinearLayout>
+    </RadioGroup>
 
     <!-- Current Rank Box -->
     <LinearLayout
         android:id="@+id/bigBox"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@id/difficultyBoxes"
+        android:layout_below="@id/difficultyRadioGroup"
         android:layout_marginTop="20dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
