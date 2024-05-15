@@ -28,6 +28,10 @@
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
+            android:name=".MathPuzzleActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+        <activity
             android:name=".Leaderboard"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />

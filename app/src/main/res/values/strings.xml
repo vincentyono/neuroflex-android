@@ -27,10 +27,10 @@
     <string name="desc_reg">Create an account to begin training your brain and save progress.</string>
     <string name="descLogin">Welcome back! We have missed you.</string>
     <string name="forgot_password">Forgot password</string>
-    <string name="all_games">All Games</string>
-    <string name="math_text_view">Math</string>
-    <string name="memory_text_view">Memory</string>
-    <string name="language_text_view">Language</string>
-    <string name="logic_text_view">Logic</string>
-
+    <string name="score_label">Score</string>
+    <string name="score_value">0</string>
+    <string name="math_puzzle_n_question">1/10</string>
+    <string name="pause_button_description">Pause game</string>
+    <string name="help_button_description">Get help!</string>
+    <string name="math_question">99 + 99 = </string>
 </resources>
