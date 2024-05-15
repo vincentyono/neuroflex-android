@@ -55,6 +55,10 @@
         </activity>
         <activity
             android:name=".LanguageGame"
+            android:exported="false"
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+        <activity
+            android:name=".LanguageMenuTest"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
