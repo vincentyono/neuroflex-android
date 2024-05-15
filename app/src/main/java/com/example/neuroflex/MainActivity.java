@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.bottom_stats) {
-                startActivity(new Intent(getApplicationContext(), Stats.class));
+                startActivity(new Intent(getApplicationContext(), PersonalStats.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
