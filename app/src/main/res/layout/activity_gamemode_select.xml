@@ -6,34 +6,32 @@
 
     <!-- Game Mode Title Text -->
     <TextView
-        android:id="@+id/textGameMode"
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Memory \nPlay"
+        android:text="Placeholder"
         android:textSize="40sp"
         android:textColor="@android:color/white"
-        android:textStyle="normal"
         android:layout_marginTop="70dp"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginStart="30dp"/>
 
     <!-- Select Difficulty Text -->
     <TextView
         android:id="@+id/textSelectDifficulty"
-        android:layout_below="@id/textGameMode"
+        android:layout_below="@id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select difficulty"
         android:textSize="20sp"
         android:textColor="@android:color/white"
-        android:textStyle="normal"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginStart="30dp"/>
 
     <!-- Difficulty Boxes -->
     <LinearLayout
         android:id="@+id/difficultyBoxes"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/textSelectDifficulty"
         android:orientation="horizontal"
         android:layout_marginTop="15dp"
@@ -44,20 +42,20 @@
         <LinearLayout
             android:id="@+id/easyBox"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/round_corners_green"
             android:layout_marginEnd="12dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Easy"
                 android:textSize="18sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
 
@@ -65,20 +63,20 @@
         <LinearLayout
             android:id="@+id/mediumBox"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/round_corners_orange"
             android:layout_marginEnd="12dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium"
                 android:textSize="18sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
 
@@ -86,19 +84,19 @@
         <LinearLayout
             android:id="@+id/hardBox"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/round_corners_red"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingVertical="10dp"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hard"
                 android:textSize="18sp"
-                android:textColor="@android:color/white"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"/>
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -121,7 +119,7 @@
             android:text="Current Rank"
             android:textSize="18sp"
             android:textColor="@android:color/black"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"/>
 
         <TextView
@@ -130,7 +128,7 @@
             android:text="Beginner"
             android:textSize="25sp"
             android:textColor="@android:color/black"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="3dp"/>
 
     </LinearLayout>
@@ -184,7 +182,7 @@
                     android:layout_height="wrap_content"
                     android:text="860"
                     android:textSize="40sp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@android:color/black"/>
 
             </LinearLayout>
 
@@ -197,7 +195,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/round_corners"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -228,8 +227,8 @@
             android:layout_height="wrap_content"
             android:text="How to play"
             android:textSize="22sp"
-            android:textColor="@color/white"
-            android:layout_marginLeft="20dp"/>
+            android:textColor="@android:color/white"
+            android:layout_marginStart="20dp"/>
 
     </LinearLayout>
 
@@ -245,7 +244,7 @@
         android:text="Play Now"
         android:layout_below="@id/howToBox"
         android:textSize="25sp"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/white"/>
+        android:textColor="@android:color/black"
+        android:backgroundTint="@android:color/white"/>
 
 </RelativeLayout>

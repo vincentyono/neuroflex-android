@@ -33,4 +33,10 @@
     <string name="pause_button_description">Pause game</string>
     <string name="help_button_description">Get help!</string>
     <string name="math_question">99 + 99 = </string>
+    <string name="all_games">All Games</string>
+    <string name="math_text_view">Math</string>
+    <string name="memory_text_view">Memory</string>
+    <string name="language_text_view">Language</string>
+    <string name="logic_text_view">Logic</string>
+
 </resources>
