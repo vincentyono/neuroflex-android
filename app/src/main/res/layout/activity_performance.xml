@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_green">
+
+    <!-- Title: Performance Insight -->
+    <TextView
+        android:id="@+id/textPerformanceInsight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Performance \nInsight"
+        android:textSize="40sp"
+        android:textColor="@android:color/white"
+        android:textStyle="normal"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="30dp"/>
+
+    <!-- Big Box -->
+    <LinearLayout
+        android:id="@+id/bigBox"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_below="@id/textPerformanceInsight"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_corners"
+        android:orientation="vertical">
+
+        <!-- Contents of the big box: Score Evolution -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score Evolution"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+    <!-- Two Equally Sized Boxes in a Row -->
+    <LinearLayout
+        android:id="@+id/twoBoxes"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_below="@id/bigBox"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp">
+
+        <!-- First Box: Total Score -->
+        <LinearLayout
+            android:id="@+id/firstBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical">
+
+            <!-- Contents of the first box: Total Score -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Score"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <!-- Second Box: Objective -->
+        <LinearLayout
+            android:id="@+id/secondBox"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners"
+            android:orientation="vertical">
+
+            <!-- Contents of the second box: Objective -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Objective"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Finish Button -->
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Finish"
+        android:layout_below="@id/twoBoxes"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/white"/>
+
+</RelativeLayout>
