@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,7 +65,9 @@ public class LanguageGame extends AppCompatActivity {
     }
 
     private void loadQuestionsFromFirestore() {
-        db.collection(difficultyLevel).get()
+        String collectionName = "LANG_" + difficultyLevel.toUpperCase();
+
+        db.collection(collectionName).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -80,10 +83,14 @@ public class LanguageGame extends AppCompatActivity {
                                     Log.e(TAG, "Error: Missing data in document " + document.getId());
                                 }
                             }
-                            loadQuestion();
+                            if (questions.isEmpty()) {
+                                Toast.makeText(LanguageGame.this, "No questions found for the selected difficulty.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                loadQuestion();
+                            }
                         } else {
                             Log.e(TAG, "Error getting documents: ", task.getException());
-                            // Handle the error
+                            Toast.makeText(LanguageGame.this, "Failed to load questions. Please try again later.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -129,7 +136,7 @@ public class LanguageGame extends AppCompatActivity {
         }, 2000); // 2 second delay before loading next question
     }
 
-    private static class Question {
+    public static class Question {
         private String questionText;
         private List<String> answers;
         private int correctAnswerIndex;
