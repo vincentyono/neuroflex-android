@@ -219,6 +219,32 @@ public class DbQuery {
         });
     }
 
+    // Function to store each game in the database
+    public static void storeGame(String gameMode, String difficulty, List<Integer> scores, MyCompleteListener completeListener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Create a new document reference in the "GAMES" collection
+        DocumentReference newGameRef = g_firestore.collection("GAMES").document();
+
+        // Create a map with game data
+        GameData gameData = new GameData(userId, gameMode, difficulty, scores);
+
+        // Store the game data in the Firestore document
+        newGameRef.set(gameData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        completeListener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
+    }
+
     public interface OnTopScoreLoadedListener {
         void onTopScoreLoaded(int topScore);
     }

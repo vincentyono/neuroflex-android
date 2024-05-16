@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -42,6 +43,8 @@ public class LanguageGame extends AppCompatActivity {
     private long startTime;
     private int totalCorrect = 0;
     private int totalQuestions = 0;
+
+    private ArrayList<Integer> scoresList = new ArrayList<>();
     private TextView scoreTextView;
 
     // Question counter variables
@@ -108,6 +111,7 @@ public class LanguageGame extends AppCompatActivity {
             time = calculateTotalTimeInSeconds();
             int gameIndex = 2;
             int currentScore = score;
+            String gameMode = "language";
             DbQuery.updateGameParams(gameIndex, (double) accuracy, (double) speed, (double) time, currentScore, new MyCompleteListener() {
                 @Override
                 public void onSuccess() {
@@ -119,13 +123,26 @@ public class LanguageGame extends AppCompatActivity {
                             intent.putExtra("score", currentScore);
                             intent.putExtra("topScore", topScore);
                             startActivity(intent);
+                            Log.d(TAG, "Game data stored successfully");
+
+                            DbQuery.storeGame(gameMode, difficultyLevel, scoresList, new MyCompleteListener() {
+                                @Override
+                                public void onSuccess() {
+                                    Log.d(TAG, "Game data stored successfully");
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                    Log.d(TAG, "Failed to store game data");
+                                }
+                            });
                         }
                     });
                 }
 
                 @Override
                 public void onFailure() {
-                    // Handle failure
+                    Log.d(TAG, "Failed to update game data");
                 }
             });
 
@@ -167,12 +184,16 @@ public class LanguageGame extends AppCompatActivity {
             answerButtons[i].setEnabled(false);
         }
 
+        int questionScore;
         LangQuestion currentQuestion = questions.get(currentQuestionIndex);
         if (selectedAnswerIndex == currentQuestion.getCorrectAnswerIndex()) {
             totalCorrect++;
-            score += (100-penalty);
+            questionScore = (100 - penalty);
+            score += questionScore;
+            scoresList.add(questionScore);
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
+            scoresList.add(0);
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.RED));
             answerButtons[currentQuestion.getCorrectAnswerIndex()].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         }
