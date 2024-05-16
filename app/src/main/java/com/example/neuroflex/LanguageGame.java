@@ -14,7 +14,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.Timestamp;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LanguageGame extends AppCompatActivity {
@@ -104,31 +107,39 @@ public class LanguageGame extends AppCompatActivity {
 
             // Update the question counter
             questionCounterTextView.setText((currentQuestionIndex + 1) + "/" + totalQuestions);
-        } else {
-            // End of quiz
+        }
+
+        // End of quiz
+        else if (currentQuestionIndex == questions.size()) {
+
+            // Calculate parameters
             accuracy = calculateAccuracy();
             speed = calculateAverageSpeed();
             time = calculateTotalTimeInSeconds();
+
             int gameIndex = 2;
             int currentScore = score;
             String gameMode = "language";
+
+            // Updates game parameters
             DbQuery.updateGameParams(gameIndex, (double) accuracy, (double) speed, (double) time, currentScore, new MyCompleteListener() {
                 @Override
                 public void onSuccess() {
+                    // Gets the top score
                     DbQuery.getTopScore(gameIndex, new DbQuery.OnTopScoreLoadedListener() {
                         @Override
                         public void onTopScoreLoaded(int topScore) {
-                            // Once the top score is loaded, start the Result activity
-                            Intent intent = new Intent(LanguageGame.this, Result.class);
-                            intent.putExtra("score", currentScore);
-                            intent.putExtra("topScore", topScore);
-                            startActivity(intent);
-                            Log.d(TAG, "Game data stored successfully");
+                            Log.d(TAG, "Top score retrieved successfully");
 
+                            // Stores the game data
                             DbQuery.storeGame(gameMode, difficultyLevel, scoresList, new MyCompleteListener() {
                                 @Override
                                 public void onSuccess() {
                                     Log.d(TAG, "Game data stored successfully");
+                                    Intent intent = new Intent(LanguageGame.this, Result.class);
+                                    intent.putExtra("score", score);
+                                    intent.putExtra("topScore", topScore);
+                                    startActivity(intent);
                                 }
 
                                 @Override
