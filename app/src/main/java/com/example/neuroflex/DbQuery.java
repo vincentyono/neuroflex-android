@@ -127,6 +127,18 @@ public class DbQuery {
                             @Override
                             public void onSuccess(Void unused) {
                                 completeListener.onSuccess();
+                                // Updates Total Scores
+                                updateTotalScore(currentScore, new MyCompleteListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        completeListener.onSuccess();
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+                                        completeListener.onFailure();
+                                    }
+                                });
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -138,6 +150,26 @@ public class DbQuery {
             }
         });
 
+    }
+
+    // Function to update TOTAL_SCORE in user collection
+    public static void updateTotalScore(int currentScore, MyCompleteListener completeListener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference userDoc = g_firestore.collection("USERS").document(userId);
+
+        userDoc.update("TOTAL_SCORE", FieldValue.increment(currentScore))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        completeListener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
     }
 
     // Function to load the questions for the language games
