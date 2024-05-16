@@ -35,11 +35,16 @@ public class DbQuery {
         DocumentReference userDoc = g_firestore.collection("USERS").document(userId);
 
         // Performance data
+        // For each game mode
+        // 0: Math
+        // 1: Memory
+        // 2: Language
         List<Integer> weeklyScores = new ArrayList<>(10);
         List<Integer> speed = new ArrayList<>(3);
         List<Integer> accuracy = new ArrayList<>(3);
         List<Integer> time = new ArrayList<>(3);
         List<Integer> topScores = new ArrayList<>(3);
+        List<Integer> gamesPlayed = new ArrayList<>(3);
 
         for (int i = 0; i < 10; i++) {
             weeklyScores.add(0);
@@ -50,17 +55,17 @@ public class DbQuery {
             accuracy.add(0);
             time.add(0);
             topScores.add(0);
+            gamesPlayed.add(0);
         }
 
-        // Creates new performance collection for each user
         Map<String, Object> performanceData = new ArrayMap<>();
         performanceData.put("USER_ID", userId);
         performanceData.put("WEEKLY_SCORES", weeklyScores);
-        performanceData.put("SPEED", speed); // Array for speed
-        performanceData.put("ACCURACY", accuracy); // Array for accuracy
-        performanceData.put("TIME", time); // Array for time
+        performanceData.put("SPEED", speed);
+        performanceData.put("ACCURACY", accuracy);
+        performanceData.put("TIME", time);
         performanceData.put("TOP_SCORES", topScores);
-        performanceData.put("GAMES_PLAYED", 0); // Initialize games played to 0
+        performanceData.put("GAMES_PLAYED", gamesPlayed);
 
         DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
 
