@@ -103,6 +103,7 @@ public class DbQuery {
                 });
     }
 
+    // Function to update the game parameters every game
     public static void updateGameParams(int gameIndex, double accuracy, double speed, double time, int currentScore, MyCompleteListener completeListener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -162,6 +163,7 @@ public class DbQuery {
 
     }
 
+    // Function to load the questions for the language games
     public static void loadLangQuestions(String collectionName, final OnQuestionsLoadedListener listener) {
         g_firestore.collection(collectionName).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -189,6 +191,8 @@ public class DbQuery {
                     }
                 });
     }
+
+    // Function to randomize and select questions
     public static void selectRandomLang(List<LangQuestion> allQuestions, int questionCount, final OnQuestionsLoadedListener listener) {
         // Shuffle the list to randomize it
         Collections.shuffle(allQuestions, new Random());
