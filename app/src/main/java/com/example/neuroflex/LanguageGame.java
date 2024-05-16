@@ -105,10 +105,21 @@ public class LanguageGame extends AppCompatActivity {
             accuracy = calculateAccuracy();
             speed = calculateAverageSpeed();
             time = calculateTotalTimeInSeconds();
-            questionTextView.setText("Quiz Over! Your final score is: " + score +
-                    "Accuracy: " + accuracy +
-                    "Speed: " + speed +
-                    "Time: " + time);
+            int gameIndex = 2;
+            int currentScore = score;
+            DbQuery.updateGameParams(gameIndex, (double) accuracy, (double) speed, (double) time, currentScore, new MyCompleteListener() {
+                @Override
+                public void onSuccess() {
+                    // Handle success
+                }
+
+                @Override
+                public void onFailure() {
+                    // Handle failure
+                }
+            });
+
+            questionTextView.setText("Quiz Over! Your final score is: " + score);
             for (Button button : answerButtons) {
                 button.setVisibility(View.INVISIBLE);
             }

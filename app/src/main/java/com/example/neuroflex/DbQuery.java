@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +103,7 @@ public class DbQuery {
                 });
     }
 
-    public static void updateGameParams(int gameIndex, int accuracy, int speed, int time, int topScore, MyCompleteListener completeListener) {
+    public static void updateGameParams(int gameIndex, double accuracy, double speed, double time, int currentScore, MyCompleteListener completeListener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // Get reference to the user's document
@@ -113,22 +114,52 @@ public class DbQuery {
         updates.put("ACCURACY." + gameIndex, accuracy);
         updates.put("SPEED." + gameIndex, speed);
         updates.put("TIME." + gameIndex, time);
-        updates.put("TOP_SCORES." + gameIndex, topScore);
         updates.put("GAMES_PLAYED." + gameIndex, FieldValue.increment(1)); // Increment games played
 
-        performanceDoc.update(updates)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        completeListener.onSuccess();
+        // Get the current top score for the game
+        // Get the current top score for the game
+        performanceDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        List<Long> topScoresLong = (List<Long>) document.get("TOP_SCORES");
+                        List<Integer> topScores = new ArrayList<>();
+                        if (topScoresLong != null) {
+                            for (Long scoreLong : topScoresLong) {
+                                int scoreInt = scoreLong != null ? scoreLong.intValue() : 0; // Handle null values appropriately
+                                topScores.add(scoreInt);
+                            }
+                        }
+                        if (topScores.size() > gameIndex) {
+                            int currentTopScore = topScores.get(gameIndex);
+                            if (currentScore > currentTopScore) {
+                                updates.put("TOP_SCORES." + gameIndex, currentScore); // Update top score if current score is higher
+                            }
+                        }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        completeListener.onFailure();
-                    }
-                });
+                } else {
+                    Log.e(TAG, "Error getting document: ", task.getException());
+                }
+
+                // Perform the update
+                performanceDoc.update(updates)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                completeListener.onSuccess();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                completeListener.onFailure();
+                            }
+                        });
+            }
+        });
+
     }
 
     public static void loadLangQuestions(String collectionName, final OnQuestionsLoadedListener listener) {
@@ -173,5 +204,7 @@ public class DbQuery {
     public interface OnQuestionsLoadedListener {
         void onQuestionsLoaded(List<LangQuestion> questions);
     }
+
+
 
 }
