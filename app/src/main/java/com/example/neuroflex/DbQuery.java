@@ -15,6 +15,7 @@ import com.google.firebase.firestore.WriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class DbQuery {
 
@@ -92,4 +93,34 @@ public class DbQuery {
                     }
                 });
     }
+
+    public static void updateGameParams(int gameIndex, int accuracy, int speed, int time, int topScore, MyCompleteListener completeListener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Get reference to the user's document
+        DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
+
+        // Update the parameters
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("ACCURACY." + gameIndex, accuracy);
+        updates.put("SPEED." + gameIndex, speed);
+        updates.put("TIME." + gameIndex, time);
+        updates.put("TOP_SCORES." + gameIndex, topScore);
+        updates.put("GAMES_PLAYED." + gameIndex, FieldValue.increment(1)); // Increment games played
+
+        performanceDoc.update(updates)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        completeListener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
+    }
+
 }
