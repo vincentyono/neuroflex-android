@@ -375,6 +375,33 @@ public class DbQuery {
         });
     }
 
+    public static void getDailyScores(DailyScoresListener listener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        g_firestore.collection("USERS")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                List<Map<String, Object>> dailyScores = (List<Map<String, Object>>) document.get("DAILY_SCORES");
+                                if (dailyScores != null) {
+                                    listener.onSuccess(dailyScores);
+                                } else {
+                                    listener.onFailure(new Exception("No daily scores found"));
+                                }
+                            } else {
+                                listener.onFailure(new Exception("No such document"));
+                            }
+                        } else {
+                            listener.onFailure(task.getException());
+                        }
+                    }
+                });
+    }
+
     // Utility function to check if two timestamps represent the same date
     private static boolean isSameDate(Timestamp timestamp1, Timestamp timestamp2) {
         return timestamp1.toDate().equals(timestamp2.toDate());
@@ -394,5 +421,10 @@ public class DbQuery {
 
     public interface OnDailyScoresLoadedListener {
         void onDailyScoresLoaded(ArrayList<Integer> dailyScores);
+    }
+
+    public interface DailyScoresListener {
+        void onSuccess(List<Map<String, Object>> dailyScores);
+        void onFailure(Exception e);
     }
 }
