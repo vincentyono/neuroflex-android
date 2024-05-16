@@ -45,37 +45,21 @@ public class DbQuery {
         DocumentReference userDoc = g_firestore.collection("USERS").document(userId);
 
         // Performance data
-        // For each game mode
-        // 0: Math
-        // 1: Memory
-        // 2: Language
-        List<Integer> weeklyScores = new ArrayList<>(10);
-        List<Integer> speed = new ArrayList<>(3);
-        List<Integer> accuracy = new ArrayList<>(3);
-        List<Integer> time = new ArrayList<>(3);
-        List<Integer> topScores = new ArrayList<>(3);
-        List<Integer> gamesPlayed = new ArrayList<>(3);
-
-        for (int i = 0; i < 10; i++) {
-            weeklyScores.add(0);
-        }
-
-        for (int i = 0; i < 3; i++) {
-            speed.add(0);
-            accuracy.add(0);
-            time.add(0);
-            topScores.add(0);
-            gamesPlayed.add(0);
-        }
-
         Map<String, Object> performanceData = new ArrayMap<>();
         performanceData.put("USER_ID", userId);
-        performanceData.put("WEEKLY_SCORES", weeklyScores);
-        performanceData.put("SPEED", speed);
-        performanceData.put("ACCURACY", accuracy);
-        performanceData.put("TIME", time);
-        performanceData.put("TOP_SCORES", topScores);
-        performanceData.put("GAMES_PLAYED", gamesPlayed);
+
+        // Initialize game data map for each game mode
+        Map<String, Object> gameData = new ArrayMap<>();
+        for (int i = 0; i < 3; i++) {
+            Map<String, Object> gameModeData = new ArrayMap<>();
+            gameModeData.put("ACCURACY", 0);
+            gameModeData.put("SPEED", 0);
+            gameModeData.put("TIME", 0);
+            gameModeData.put("GAMES_PLAYED", 0);
+            gameModeData.put("TOP_SCORE", 0);
+            gameData.put(String.valueOf(i), gameModeData);
+        }
+        performanceData.put("GAME_DATA", gameData);
 
         DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
 
@@ -103,21 +87,18 @@ public class DbQuery {
                 });
     }
 
-    // Function to update the game parameters every game
     public static void updateGameParams(int gameIndex, double accuracy, double speed, double time, int currentScore, MyCompleteListener completeListener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Get reference to the user's document
         DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
 
         // Update the parameters
         Map<String, Object> updates = new HashMap<>();
-        updates.put("ACCURACY." + gameIndex, accuracy);
-        updates.put("SPEED." + gameIndex, speed);
-        updates.put("TIME." + gameIndex, time);
-        updates.put("GAMES_PLAYED." + gameIndex, FieldValue.increment(1)); // Increment games played
+        updates.put("GAME_DATA." + gameIndex + ".ACCURACY", FieldValue.increment(accuracy));
+        updates.put("GAME_DATA." + gameIndex + ".SPEED", FieldValue.increment(speed));
+        updates.put("GAME_DATA." + gameIndex + ".TIME", FieldValue.increment(time));
+        updates.put("GAME_DATA." + gameIndex + ".GAMES_PLAYED", FieldValue.increment(1)); // Increment games played
 
-        // Get the current top score for the game
         // Get the current top score for the game
         performanceDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -125,18 +106,14 @@ public class DbQuery {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        List<Long> topScoresLong = (List<Long>) document.get("TOP_SCORES");
-                        List<Integer> topScores = new ArrayList<>();
-                        if (topScoresLong != null) {
-                            for (Long scoreLong : topScoresLong) {
-                                int scoreInt = scoreLong != null ? scoreLong.intValue() : 0; // Handle null values appropriately
-                                topScores.add(scoreInt);
-                            }
-                        }
-                        if (topScores.size() > gameIndex) {
-                            int currentTopScore = topScores.get(gameIndex);
-                            if (currentScore > currentTopScore) {
-                                updates.put("TOP_SCORES." + gameIndex, currentScore); // Update top score if current score is higher
+                        Map<String, Object> gameData = (Map<String, Object>) document.get("GAME_DATA");
+                        if (gameData != null) {
+                            Map<String, Object> gameModeData = (Map<String, Object>) gameData.get(String.valueOf(gameIndex));
+                            if (gameModeData != null) {
+                                Long currentTopScore = (Long) gameModeData.getOrDefault("TOP_SCORE", 0L);
+                                if (currentScore > currentTopScore) {
+                                    updates.put("GAME_DATA." + gameIndex + ".TOP_SCORE", currentScore); // Update top score if current score is higher
+                                }
                             }
                         }
                     }
@@ -208,7 +185,5 @@ public class DbQuery {
     public interface OnQuestionsLoadedListener {
         void onQuestionsLoaded(List<LangQuestion> questions);
     }
-
-
 
 }
