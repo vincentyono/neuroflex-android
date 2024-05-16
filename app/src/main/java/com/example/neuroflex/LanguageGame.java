@@ -136,16 +136,13 @@ public class LanguageGame extends AppCompatActivity {
         // Calculate the penalty based on time passed
         int penalty = (30 - remainingTime) * TIME_PENALTY_PER_SECOND;
 
-        // Apply the penalty regardless of whether the answer is correct or not
-        score -= penalty;
-
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i].setEnabled(false);
         }
 
         LangQuestion currentQuestion = questions.get(currentQuestionIndex);
         if (selectedAnswerIndex == currentQuestion.getCorrectAnswerIndex()) {
-            score += 100; // Add 100 points for a correct answer
+            score += (100-penalty);
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.RED));
@@ -165,29 +162,5 @@ public class LanguageGame extends AppCompatActivity {
 
     private void updateScore() {
         scoreTextView.setText(String.valueOf(score));
-    }
-
-    private static class Question {
-        private String questionText;
-        private List<String> answers;
-        private int correctAnswerIndex;
-
-        public Question(String questionText, List<String> answers, int correctAnswerIndex) {
-            this.questionText = questionText;
-            this.answers = answers;
-            this.correctAnswerIndex = correctAnswerIndex;
-        }
-
-        public String getQuestionText() {
-            return questionText;
-        }
-
-        public List<String> getAnswers() {
-            return answers;
-        }
-
-        public int getCorrectAnswerIndex() {
-            return correctAnswerIndex;
-        }
     }
 }
