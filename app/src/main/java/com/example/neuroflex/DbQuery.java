@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
@@ -19,6 +20,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -41,6 +45,7 @@ public class DbQuery {
         userData.put("NAME", name);
         userData.put("STREAK", 0);
         userData.put("TOTAL_SCORE", 0);
+        userData.put("DAILY_SCORES", new ArrayList<Integer>()); // Initialize empty array for daily scores
 
         DocumentReference userDoc = g_firestore.collection("USERS").document(userId);
 
@@ -126,12 +131,14 @@ public class DbQuery {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                completeListener.onSuccess();
                                 // Updates Total Scores
                                 updateTotalScore(currentScore, new MyCompleteListener() {
                                     @Override
                                     public void onSuccess() {
-                                        completeListener.onSuccess();
+                                        // Get current date
+                                        Timestamp currentDate = new Timestamp(new Date());
+                                        // After updating total score, update daily scores
+                                        updateDailyScores(currentDate, currentScore, completeListener);
                                     }
 
                                     @Override
@@ -149,7 +156,6 @@ public class DbQuery {
                         });
             }
         });
-
     }
 
     // Function to update TOTAL_SCORE in user collection
@@ -195,7 +201,6 @@ public class DbQuery {
                             selectRandomLang(allQuestions, 10, listener);
                         } else {
                             Log.e(TAG, "Error getting documents: ", task.getException());
-                            // Handle the error
                         }
                     }
                 });
@@ -214,10 +219,7 @@ public class DbQuery {
         }
     }
 
-    public interface OnQuestionsLoadedListener {
-        void onQuestionsLoaded(List<LangQuestion> questions);
-    }
-
+    // Function to get top score
     public static void getTopScore(int gameIndex, OnTopScoreLoadedListener listener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
@@ -240,8 +242,6 @@ public class DbQuery {
                             }
                         }
                     }
-                    // If document doesn't exist or top score not found, return 0
-                    listener.onTopScoreLoaded(0);
                 } else {
                     Log.e(TAG, "Error getting document: ", task.getException());
                     // Handle error if necessary
@@ -258,8 +258,11 @@ public class DbQuery {
         // Create a new document reference in the "GAMES" collection
         DocumentReference newGameRef = g_firestore.collection("GAMES").document();
 
-        // Create a map with game data
-        GameData gameData = new GameData(userId, gameMode, difficulty, scores);
+        // Get the current timestamp
+        Timestamp timestamp = Timestamp.now();
+
+        // Create a GameData object with the current timestamp
+        GameData gameData = new GameData(userId, gameMode, difficulty, scores, timestamp);
 
         // Store the game data in the Firestore document
         newGameRef.set(gameData)
@@ -277,8 +280,119 @@ public class DbQuery {
                 });
     }
 
+    // Updates the daily scores
+    public static void updateDailyScores(Timestamp date, int recentScore, MyCompleteListener completeListener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference userDoc = g_firestore.collection("USERS").document(userId);
+
+        // First, get the existing daily scores
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> userData = document.getData();
+                        if (userData != null && userData.containsKey("DAILY_SCORES")) {
+                            ArrayList<Map<String, Object>> dailyScores = (ArrayList<Map<String, Object>>) userData.get("DAILY_SCORES");
+
+                            // Check if there's a score for the given date
+                            boolean foundDate = false;
+                            for (Map<String, Object> scoreData : dailyScores) {
+                                Timestamp scoreDate = (Timestamp) scoreData.get("date");
+                                if (scoreDate != null) {
+                                    Calendar scoreCalendar = Calendar.getInstance();
+                                    scoreCalendar.setTime(scoreDate.toDate());
+                                    int scoreYear = scoreCalendar.get(Calendar.YEAR);
+                                    int scoreMonth = scoreCalendar.get(Calendar.MONTH);
+                                    int scoreDay = scoreCalendar.get(Calendar.DAY_OF_MONTH);
+
+                                    Calendar targetCalendar = Calendar.getInstance();
+                                    targetCalendar.setTime(date.toDate());
+                                    int targetYear = targetCalendar.get(Calendar.YEAR);
+                                    int targetMonth = targetCalendar.get(Calendar.MONTH);
+                                    int targetDay = targetCalendar.get(Calendar.DAY_OF_MONTH);
+
+                                    if (scoreYear == targetYear && scoreMonth == targetMonth && scoreDay == targetDay) {
+                                        // Update the recent score for the existing date
+                                        Long currentScoreLong = (Long) scoreData.get("score");
+                                        int currentScore = currentScoreLong != null ? currentScoreLong.intValue() : 0;
+                                        int newScore = currentScore + recentScore;
+                                        scoreData.put("score", newScore);
+
+                                        foundDate = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // If no score exists for the date, add a new entry
+                            if (!foundDate) {
+                                // Create a new entry for the given date
+                                Map<String, Object> newScoreData = new HashMap<>();
+                                newScoreData.put("date", date);
+                                newScoreData.put("score", recentScore);
+                                dailyScores.add(newScoreData);
+                            }
+
+
+                            // Sort the daily scores by date (in ascending order)
+                            Collections.sort(dailyScores, new Comparator<Map<String, Object>>() {
+                                @Override
+                                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
+                                    Timestamp date1 = (Timestamp) o1.get("date");
+                                    Timestamp date2 = (Timestamp) o2.get("date");
+                                    return date1.compareTo(date2);
+                                }
+                            });
+
+                            // If the number of daily scores exceeds 7, remove the oldest one
+                            while (dailyScores.size() > 7) {
+                                dailyScores.remove(0); // Remove the oldest score
+                            }
+
+                            // Update the daily scores in Firestore
+                            userDoc.update("DAILY_SCORES", dailyScores)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            completeListener.onSuccess();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            completeListener.onFailure();
+                                        }
+                                    });
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Error getting document: ", task.getException());
+                    completeListener.onFailure();
+                }
+            }
+        });
+    }
+
+    // Utility function to check if two timestamps represent the same date
+    private static boolean isSameDate(Timestamp timestamp1, Timestamp timestamp2) {
+        return timestamp1.toDate().equals(timestamp2.toDate());
+    }
+
+    public interface OnQuestionsLoadedListener {
+        void onQuestionsLoaded(List<LangQuestion> questions);
+    }
+
     public interface OnTopScoreLoadedListener {
         void onTopScoreLoaded(int topScore);
     }
 
+    public interface OnTotalScoreLoadedListener {
+        void onTotalScoreLoaded(int totalScore);
+    }
+
+    public interface OnDailyScoresLoadedListener {
+        void onDailyScoresLoaded(ArrayList<Integer> dailyScores);
+    }
 }
