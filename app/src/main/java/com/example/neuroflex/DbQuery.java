@@ -1,6 +1,7 @@
 package com.example.neuroflex;
 
 import android.util.ArrayMap;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,15 +12,22 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.Random;
 
 public class DbQuery {
 
-    public static FirebaseFirestore g_firestore;
+    private static final String TAG = "DbQuery";
+    private static FirebaseFirestore g_firestore = FirebaseFirestore.getInstance();
 
     public static void createUserData(String email, String name, MyCompleteListener completeListener) {
         g_firestore = FirebaseFirestore.getInstance();
@@ -121,6 +129,49 @@ public class DbQuery {
                         completeListener.onFailure();
                     }
                 });
+    }
+
+    public static void loadLangQuestions(String collectionName, final OnQuestionsLoadedListener listener) {
+        g_firestore.collection(collectionName).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<LangQuestion> allQuestions = new ArrayList<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String questionText = document.getString("question");
+                                List<String> answers = (List<String>) document.get("answers");
+                                Long correctAnswerIndex = document.getLong("correctAnswer");
+
+                                if (questionText != null && answers != null && correctAnswerIndex != null) {
+                                    allQuestions.add(new LangQuestion(questionText, answers, correctAnswerIndex.intValue()));
+                                } else {
+                                    Log.e(TAG, "Error: Missing data in document " + document.getId());
+                                }
+                            }
+                            // Select exactly 10 random questions
+                            selectRandomLang(allQuestions, 10, listener);
+                        } else {
+                            Log.e(TAG, "Error getting documents: ", task.getException());
+                            // Handle the error
+                        }
+                    }
+                });
+    }
+    public static void selectRandomLang(List<LangQuestion> allQuestions, int questionCount, final OnQuestionsLoadedListener listener) {
+        // Shuffle the list to randomize it
+        Collections.shuffle(allQuestions, new Random());
+
+        // Select exactly 'questionCount' questions (or fewer if not enough questions available)
+        int count = Math.min(allQuestions.size(), questionCount);
+        List<LangQuestion> selectedQuestions = allQuestions.subList(0, count);
+        if (listener != null) {
+            listener.onQuestionsLoaded(selectedQuestions);
+        }
+    }
+
+    public interface OnQuestionsLoadedListener {
+        void onQuestionsLoaded(List<LangQuestion> questions);
     }
 
 }
