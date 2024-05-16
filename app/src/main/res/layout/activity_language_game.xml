@@ -8,6 +8,84 @@
     android:padding="16dp">
 
     <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="start">
+
+            <ImageButton
+                android:id="@+id/pause_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/pause_circle"
+                android:background="@android:color/transparent"
+                android:contentDescription="Pause Button"/>
+
+            <ImageButton
+                android:id="@+id/help_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/help_circle"
+                android:background="@android:color/transparent"
+                android:contentDescription="Help Button"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/questionsProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Score: "
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="end"/>
+
+            <TextView
+                android:id="@+id/scoreTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="0"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:layout_gravity="end"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/circleTimer"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/circular" />
+
+    <LinearLayout
         android:id="@+id/questionBox"
         android:layout_width="match_parent"
         android:layout_height="150dp"

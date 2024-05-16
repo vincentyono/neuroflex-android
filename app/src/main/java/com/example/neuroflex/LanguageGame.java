@@ -3,12 +3,13 @@ package com.example.neuroflex;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,16 @@ public class LanguageGame extends AppCompatActivity {
     private List<Question> questions = new ArrayList<>();
     private int currentQuestionIndex = 0;
     private String difficultyLevel;
+    private String collectionName;
+
+    // Timer variables
+    private CountDownTimer timer;
+    private int remainingTime;
+    private static final int TIME_PENALTY_PER_SECOND = 2;
+
+    // Score variables
+    private int score = 0;
+    private TextView scoreTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +55,13 @@ public class LanguageGame extends AppCompatActivity {
         answerButtons[1] = findViewById(R.id.answerButton2);
         answerButtons[2] = findViewById(R.id.answerButton3);
         answerButtons[3] = findViewById(R.id.answerButton4);
+        scoreTextView = findViewById(R.id.scoreTextView);
 
         db = FirebaseFirestore.getInstance();
 
         // Get the difficulty level from the Intent
         difficultyLevel = getIntent().getStringExtra("DIFFICULTY_LEVEL");
+        collectionName = "LANG_" + difficultyLevel.toUpperCase();
 
         // Load questions from Firestore
         loadQuestionsFromFirestore();
@@ -65,8 +78,6 @@ public class LanguageGame extends AppCompatActivity {
     }
 
     private void loadQuestionsFromFirestore() {
-        String collectionName = "LANG_" + difficultyLevel.toUpperCase();
-
         db.collection(collectionName).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -83,20 +94,19 @@ public class LanguageGame extends AppCompatActivity {
                                     Log.e(TAG, "Error: Missing data in document " + document.getId());
                                 }
                             }
-                            if (questions.isEmpty()) {
-                                Toast.makeText(LanguageGame.this, "No questions found for the selected difficulty.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                loadQuestion();
-                            }
+                            loadQuestion();
                         } else {
                             Log.e(TAG, "Error getting documents: ", task.getException());
-                            Toast.makeText(LanguageGame.this, "Failed to load questions. Please try again later.", Toast.LENGTH_SHORT).show();
+                            // Handle the error
                         }
                     }
                 });
     }
 
     private void loadQuestion() {
+        // Reset the timer for each new question
+        startTimer();
+
         if (currentQuestionIndex < questions.size()) {
             Question currentQuestion = questions.get(currentQuestionIndex);
             questionTextView.setText(currentQuestion.getQuestionText());
@@ -114,13 +124,41 @@ public class LanguageGame extends AppCompatActivity {
         }
     }
 
+    private void startTimer() {
+        if (timer != null) {
+            timer.cancel();
+        }
+
+        timer = new CountDownTimer(30000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                remainingTime = (int) (millisUntilFinished / 1000);
+                // Calculate progress percentage
+                int progress = (int) ((millisUntilFinished / 30000.0) * 100);
+                // Set progress to the ProgressBar
+                ProgressBar progressBar = findViewById(R.id.circleTimer);
+                progressBar.setProgress(progress);
+            }
+
+            public void onFinish() {
+                score -= remainingTime * 2; // Subtract 2 for every second of remaining time
+                updateScore();
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }.start();
+    }
+
     private void checkAnswer(int selectedAnswerIndex) {
+        timer.cancel(); // Cancel the timer when an answer is selected
+
         for (int i = 0; i < answerButtons.length; i++) {
             answerButtons[i].setEnabled(false);
         }
 
         Question currentQuestion = questions.get(currentQuestionIndex);
         if (selectedAnswerIndex == currentQuestion.getCorrectAnswerIndex()) {
+            score += 100; // Add 100 points for a correct answer
+            updateScore();
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.RED));
@@ -136,7 +174,11 @@ public class LanguageGame extends AppCompatActivity {
         }, 2000); // 2 second delay before loading next question
     }
 
-    public static class Question {
+    private void updateScore() {
+        scoreTextView.setText(String.valueOf(score));
+    }
+
+    private static class Question {
         private String questionText;
         private List<String> answers;
         private int correctAnswerIndex;
