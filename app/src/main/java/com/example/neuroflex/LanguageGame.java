@@ -32,13 +32,19 @@ public class LanguageGame extends AppCompatActivity {
     private int remainingTime;
     private static final int TIME_PENALTY_PER_SECOND = 2;
 
-    // Score variables
+    // Performance Parameters
     private int score = 0;
+    private double accuracy = 0;
+    private double speed = 0;
+    private double time = 0;
+
+    private long startTime;
+    private int totalCorrect = 0;
+    private int totalQuestions = 0;
     private TextView scoreTextView;
 
     // Question counter variables
     private TextView questionCounterTextView;
-    private int totalQuestions = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +88,7 @@ public class LanguageGame extends AppCompatActivity {
         if (currentQuestionIndex < questions.size()) {
             // Reset the timer for each new question
             startTimer();
+            startTime = System.currentTimeMillis();
 
             LangQuestion currentQuestion = questions.get(currentQuestionIndex);
             questionTextView.setText(currentQuestion.getQuestionText());
@@ -95,7 +102,13 @@ public class LanguageGame extends AppCompatActivity {
             questionCounterTextView.setText((currentQuestionIndex + 1) + "/" + totalQuestions);
         } else {
             // End of quiz
-            questionTextView.setText("Quiz Over! Your final score is: " + score);
+            accuracy = calculateAccuracy();
+            speed = calculateAverageSpeed();
+            time = calculateTotalTimeInSeconds();
+            questionTextView.setText("Quiz Over! Your final score is: " + score +
+                    "Accuracy: " + accuracy +
+                    "Speed: " + speed +
+                    "Time: " + time);
             for (Button button : answerButtons) {
                 button.setVisibility(View.INVISIBLE);
             }
@@ -118,10 +131,7 @@ public class LanguageGame extends AppCompatActivity {
             }
 
             public void onFinish() {
-                // Apply the penalty when the timer finishes
-                int penalty = remainingTime * TIME_PENALTY_PER_SECOND; // Penalty calculation
-                score -= penalty;
-                updateScore();
+                // Skip question if user doesn't answer on time
                 currentQuestionIndex++;
                 loadQuestion();
             }
@@ -142,14 +152,17 @@ public class LanguageGame extends AppCompatActivity {
 
         LangQuestion currentQuestion = questions.get(currentQuestionIndex);
         if (selectedAnswerIndex == currentQuestion.getCorrectAnswerIndex()) {
+            totalCorrect++;
             score += (100-penalty);
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.RED));
             answerButtons[currentQuestion.getCorrectAnswerIndex()].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         }
-
-        updateScore(); // Update the score after applying the penalty and checking the answer
+        long endTime = System.currentTimeMillis();
+        long questionTime = endTime - startTime;
+        time += questionTime;
+        updateScore(); // Update score text view
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -157,10 +170,31 @@ public class LanguageGame extends AppCompatActivity {
                 currentQuestionIndex++;
                 loadQuestion();
             }
-        }, 2000); // 2 second delay before loading next question
+        }, 1000); // 1 second delay before loading next question
     }
 
+    // Function to update the score's text view
     private void updateScore() {
         scoreTextView.setText(String.valueOf(score));
     }
+
+    // Calculate accuracy (correct/total answers)
+    private double calculateAccuracy() {
+        if (totalQuestions == 0) return 0.0;
+        return (double) totalCorrect / totalQuestions * 100;
+    }
+
+    // Calculate speed (average time taken to answer one question)
+    private double calculateAverageSpeed() {
+        if (totalQuestions == 0) return 0.0;
+        double averageSpeedInSeconds = (double) time / totalQuestions / 1000.0;
+        return Math.round(averageSpeedInSeconds * 100.0) / 100.0; // Round to two decimal places
+    }
+
+    // Calculate total time taken to finish one game
+    private double calculateTotalTimeInSeconds() {
+        return Math.round(time / 1000.0 * 100.0) / 100.0; // Convert to seconds and round to two decimal places
+    }
+
+
 }
