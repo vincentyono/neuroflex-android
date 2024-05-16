@@ -1,5 +1,6 @@
 package com.example.neuroflex;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -110,7 +111,16 @@ public class LanguageGame extends AppCompatActivity {
             DbQuery.updateGameParams(gameIndex, (double) accuracy, (double) speed, (double) time, currentScore, new MyCompleteListener() {
                 @Override
                 public void onSuccess() {
-                    // Handle success
+                    DbQuery.getTopScore(gameIndex, new DbQuery.OnTopScoreLoadedListener() {
+                        @Override
+                        public void onTopScoreLoaded(int topScore) {
+                            // Once the top score is loaded, start the Result activity
+                            Intent intent = new Intent(LanguageGame.this, Result.class);
+                            intent.putExtra("score", currentScore);
+                            intent.putExtra("topScore", topScore);
+                            startActivity(intent);
+                        }
+                    });
                 }
 
                 @Override
@@ -119,10 +129,6 @@ public class LanguageGame extends AppCompatActivity {
                 }
             });
 
-            questionTextView.setText("Quiz Over! Your final score is: " + score);
-            for (Button button : answerButtons) {
-                button.setVisibility(View.INVISIBLE);
-            }
         }
     }
 

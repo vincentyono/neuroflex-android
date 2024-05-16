@@ -186,4 +186,41 @@ public class DbQuery {
         void onQuestionsLoaded(List<LangQuestion> questions);
     }
 
+    public static void getTopScore(int gameIndex, OnTopScoreLoadedListener listener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
+
+        performanceDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> gameData = document.getData();
+                        if (gameData != null && gameData.containsKey("GAME_DATA")) {
+                            Map<String, Object> gameModes = (Map<String, Object>) gameData.get("GAME_DATA");
+                            if (gameModes.containsKey(String.valueOf(gameIndex))) {
+                                Map<String, Object> gameModeData = (Map<String, Object>) gameModes.get(String.valueOf(gameIndex));
+                                Long topScoreLong = (Long) gameModeData.getOrDefault("TOP_SCORE", 0L);
+                                int topScore = topScoreLong.intValue();
+                                listener.onTopScoreLoaded(topScore);
+                                return; // Exit onComplete after loading top score
+                            }
+                        }
+                    }
+                    // If document doesn't exist or top score not found, return 0
+                    listener.onTopScoreLoaded(0);
+                } else {
+                    Log.e(TAG, "Error getting document: ", task.getException());
+                    // Handle error if necessary
+                    listener.onTopScoreLoaded(0); // Return 0 in case of error
+                }
+            }
+        });
+    }
+
+    public interface OnTopScoreLoadedListener {
+        void onTopScoreLoaded(int topScore);
+    }
+
 }

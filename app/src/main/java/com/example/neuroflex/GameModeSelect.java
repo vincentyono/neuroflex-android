@@ -15,8 +15,11 @@ public class GameModeSelect extends AppCompatActivity {
     private static final String TAG = "GameModeSelect";
 
     private Button btnEasy, btnMedium, btnHard, btnPlayNow;
+    private TextView textBestScore;
     private String selectedGameMode = "";
     private String selectedDifficulty = "";
+    private int topScore;
+    private int gameIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,22 @@ public class GameModeSelect extends AppCompatActivity {
         btnMedium = findViewById(R.id.btnMedium);
         btnHard = findViewById(R.id.btnHard);
         btnPlayNow = findViewById(R.id.btnPlayNow);
+
+        // Best Score text
+        textBestScore = findViewById(R.id.bestScoreText);
+
+        // Index for DB
+        gameIndex = getGameIndex(selectedGameMode);
+
+
+        // Get top score and updates top score text
+        DbQuery.getTopScore(gameIndex, new DbQuery.OnTopScoreLoadedListener() {
+            @Override
+            public void onTopScoreLoaded(int score) {
+                topScore = score;
+                textBestScore.setText(String.valueOf(topScore));
+            }
+        });
 
         // Set onClickListeners for the difficulty buttons
         btnEasy.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +99,7 @@ public class GameModeSelect extends AppCompatActivity {
         });
     }
 
+    // Function to select the difficulty
     private void selectDifficulty(String difficulty) {
         selectedDifficulty = difficulty;
         Log.d(TAG, "selectDifficulty: " + selectedDifficulty);
@@ -102,12 +122,15 @@ public class GameModeSelect extends AppCompatActivity {
         }
     }
 
+    // Resets the button backgrounds (not pressed)
     private void resetButtonBackgrounds() {
         btnEasy.setBackground(ContextCompat.getDrawable(this, R.drawable.easy_button));
         btnMedium.setBackground(ContextCompat.getDrawable(this, R.drawable.medium_button));
         btnHard.setBackground(ContextCompat.getDrawable(this, R.drawable.hard_button));
     }
 
+    // Starts the game mode
+    // Calls the respective classes based on the selected game mode
     private void startGame() {
         Intent intent;
         switch (selectedGameMode) {
@@ -127,10 +150,26 @@ public class GameModeSelect extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // Capitalizes the first letter for text views
     private String capitalizeFirstLetter(String str) {
         if (str == null || str.isEmpty()) {
             return str;
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
+
+    // Function to get the index based on the chosen game name
+    private int getGameIndex(String gameType) {
+        switch (gameType) {
+            case "math":
+                return 0;
+            case "memory":
+                return 1;
+            case "language":
+                return 2;
+            default:
+                throw new IllegalArgumentException("Unknown game type: " + gameType);
+        }
+    }
+
 }
