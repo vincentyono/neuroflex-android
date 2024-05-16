@@ -118,10 +118,7 @@ public class LanguageGame extends AppCompatActivity {
             }
 
             public void onFinish() {
-                // Apply the penalty when the timer finishes
-                int penalty = remainingTime * TIME_PENALTY_PER_SECOND; // Penalty calculation
-                score -= penalty;
-                updateScore();
+                // Skip question if user doesn't answer on time
                 currentQuestionIndex++;
                 loadQuestion();
             }
