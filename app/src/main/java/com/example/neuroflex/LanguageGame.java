@@ -199,13 +199,14 @@ public class LanguageGame extends AppCompatActivity {
     private double calculateAverageSpeed() {
         if (totalQuestions == 0) return 0.0;
         double averageSpeedInSeconds = (double) time / totalQuestions / 1000.0;
-        return Math.round(averageSpeedInSeconds * 100.0) / 100.0; // Round to two decimal places
+        String roundedSpeedString = String.format("%.2f", averageSpeedInSeconds);
+        return Double.parseDouble(roundedSpeedString);
     }
 
     // Calculate total time taken to finish one game
     private double calculateTotalTimeInSeconds() {
-        return Math.round(time / 1000.0 * 100.0) / 100.0; // Convert to seconds and round to two decimal places
+        double totalTimeInSeconds = (double) time / 1000.0;
+        String totalTimeString = String.format("%.2f", totalTimeInSeconds);
+        return Double.parseDouble(totalTimeString);
     }
-
-
 }
