@@ -154,7 +154,7 @@ public class LanguageGame extends AppCompatActivity {
                 currentQuestionIndex++;
                 loadQuestion();
             }
-        }, 2000); // 2 second delay before loading next question
+        }, 1000); // 2 second delay before loading next question
     }
 
     private void updateScore() {
