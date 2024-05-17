@@ -180,6 +180,31 @@ public class DbQuery {
                 });
     }
 
+    // Function to fetch user's total score
+    public static void getUserTotalScore(final TotalScoreListener totalScoreListener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference userDoc = g_firestore.collection("USERS").document(userId);
+
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Long totalScoreLong = document.getLong("TOTAL_SCORE");
+                        int totalScore = totalScoreLong != null ? totalScoreLong.intValue() : 0;
+                        totalScoreListener.onSuccess(totalScore);
+                    } else {
+                        totalScoreListener.onFailure();
+                    }
+                } else {
+                    totalScoreListener.onFailure();
+                }
+            }
+        });
+    }
+
+
     // Function to load the questions for the language games
     public static void loadLangQuestions(String collectionName, final OnQuestionsLoadedListener listener) {
         g_firestore.collection(collectionName).get()

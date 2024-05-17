@@ -2,15 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="LanguageGame">
-        <State />
-      </entry>
-      <entry key="LanguageMenuTest">
-        <State />
-      </entry>
-      <entry key="MainActivity">
-        <State />
-      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -19,12 +10,12 @@
               <deviceKey>
                 <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Alysha\.android\avd\Medium_Phone_API_27.avd" />
+                  <value value="C:\Users\Alysha\.android\avd\Pixel_4_API_27.avd" />
                 </Key>
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-05-17T08:33:08.306094500Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-05-17T18:28:01.278870800Z" />
         </State>
       </entry>
     </value>

@@ -15,7 +15,7 @@ public class GameModeSelect extends AppCompatActivity {
     private static final String TAG = "GameModeSelect";
 
     private Button btnEasy, btnMedium, btnHard, btnPlayNow;
-    private TextView textBestScore;
+    private TextView textBestScore, textRank, textObjective;
     private String selectedGameMode = "";
     private String selectedDifficulty = "";
     private int topScore;
@@ -44,11 +44,31 @@ public class GameModeSelect extends AppCompatActivity {
         btnHard = findViewById(R.id.btnHard);
         btnPlayNow = findViewById(R.id.btnPlayNow);
 
+        // Rank text
+        textRank = findViewById(R.id.rankTextView);
+        textObjective = findViewById(R.id.objectiveTextView);
+
         // Best Score text
         textBestScore = findViewById(R.id.bestScoreText);
 
         // Index for DB
         gameIndex = getGameIndex(selectedGameMode);
+
+        DbQuery.getUserTotalScore(new TotalScoreListener() {
+            @Override
+            public void onSuccess(int totalScore) {
+                String currentTier = RankUtils.getTier(totalScore);
+                int pointsToNextTier = RankUtils.pointsToNextTier(totalScore);
+
+                textRank.setText(currentTier);
+                textObjective.setText(pointsToNextTier + " points to next tier");
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("RankingSystem", "Failed to retrieve total score");
+            }
+        });
 
 
         // Get top score and updates top score text

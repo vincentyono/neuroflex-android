@@ -45,16 +45,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="54dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="36dp"
-        android:text="Name"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/userPoints"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toEndOf="@+id/userRank"
-        app:layout_constraintTop_toBottomOf="@+id/headerTitle" />
+<!--    <TextView-->
+<!--        android:id="@+id/userName"-->
+<!--        android:layout_width="54dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_marginTop="36dp"-->
+<!--        android:text="Name"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/userPoints"-->
+<!--        app:layout_constraintHorizontal_bias="0.508"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/userRank"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/headerTitle" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

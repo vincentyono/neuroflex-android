@@ -8,6 +8,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -258,7 +259,7 @@ public class MemoryGameActivity extends AppCompatActivity {
 
         // Assuming the gameIndex for memory is 1
         int gameIndex = 1;
-        List<Integer> scores = new ArrayList<>(); // No scores for memory, but we need to pass an empty list
+        ArrayList<Integer> scores = new ArrayList<>(); // No scores for memory, but we need to pass an empty list
 
         Log.d(TAG, "Saving game data with the following metrics:");
         Log.d(TAG, "Time taken: " + timeTakenSeconds);
@@ -282,6 +283,11 @@ public class MemoryGameActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess() {
                                 Log.d(TAG, "Game data stored successfully");
+                                Intent intent = new Intent(MemoryGameActivity.this, Result.class);
+                                intent.putExtra("score", currentScore);
+                                intent.putExtra("topScore", topScore);
+                                intent.putIntegerArrayListExtra("scoresList", scores);
+                                startActivity(intent);
                             }
 
                             @Override

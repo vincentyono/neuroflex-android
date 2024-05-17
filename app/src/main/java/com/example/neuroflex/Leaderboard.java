@@ -43,7 +43,7 @@ public class Leaderboard extends AppCompatActivity {
 
         userRankTextView = findViewById(R.id.userRank);
         userPointsTextView = findViewById(R.id.userPoints);
-        userNameTextView = findViewById(R.id.userName);
+//        userNameTextView = findViewById(R.id.userName);
 
 //        currentUserRankTextView = findViewById(R.id.currentUserRank);
         leaderboardRecyclerView = findViewById(R.id.leaderboardRecyclerView);
@@ -105,7 +105,7 @@ public class Leaderboard extends AppCompatActivity {
         String currentUserEmail = auth.getCurrentUser().getEmail();
         for (int i = 0; i < userList.size(); i++) {
             if (userList.get(i).getEmail().equals(currentUserEmail)) {
-                userNameTextView.setText(userList.get(i).getName());
+//                userNameTextView.setText(userList.get(i).getName());
                 userRankTextView.setText((i + 1) + "th");
                 userPointsTextView.setText(userList.get(i).getTotal_score() + "pts");
                 break;
