@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_green">
+    android:background="@drawable/gradient_green"
+    tools:context=".Performance">
 
     <!-- Title: Performance Insight -->
     <TextView
@@ -38,6 +41,12 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"/>
 
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_margin="10dp" />
+
     </LinearLayout>
 
     <!-- Two Equally Sized Boxes in a Row -->
@@ -71,6 +80,16 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"/>
 
+            <TextView
+                android:id="@+id/scoreView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="32sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"/>
+
         </LinearLayout>
 
         <!-- Second Box: Objective -->
@@ -91,6 +110,15 @@
                 android:textColor="@android:color/black"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="32sp"
+                android:textColor="@android:color/black"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"/>
 
         </LinearLayout>
     </LinearLayout>

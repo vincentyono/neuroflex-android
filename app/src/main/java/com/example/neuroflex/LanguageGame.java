@@ -70,6 +70,9 @@ public class LanguageGame extends AppCompatActivity {
         difficultyLevel = getIntent().getStringExtra("DIFFICULTY_LEVEL");
         collectionName = "LANG_" + difficultyLevel.toUpperCase();
 
+        // Makes sure a new array is made everytime a new game is called
+        scoresList = new ArrayList<>();
+
         // Load questions from Firestore
         DbQuery.loadLangQuestions(collectionName, new DbQuery.OnQuestionsLoadedListener() {
             @Override
@@ -139,6 +142,7 @@ public class LanguageGame extends AppCompatActivity {
                                     Intent intent = new Intent(LanguageGame.this, Result.class);
                                     intent.putExtra("score", score);
                                     intent.putExtra("topScore", topScore);
+                                    intent.putIntegerArrayListExtra("scoresList", scoresList);
                                     startActivity(intent);
                                 }
 

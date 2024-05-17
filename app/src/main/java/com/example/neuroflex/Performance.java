@@ -1,0 +1,91 @@
+package com.example.neuroflex;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Performance extends AppCompatActivity {
+
+    private Button btnFinish;
+    private LineChart lineChart;
+    private TextView scoreText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_performance);
+
+        btnFinish = findViewById(R.id.btnNext);
+        scoreText = findViewById(R.id.scoreView);
+        lineChart = findViewById(R.id.lineChart);
+
+        Intent intent = getIntent();
+        ArrayList<Integer> scoresList = intent.getIntegerArrayListExtra("scoresList");
+        int score = intent.getIntExtra("score", 0);
+
+        scoreText.setText(String.valueOf(score));
+
+        // Call the setupLineChart method
+        setupLineChart(scoresList);
+
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainMenuIntent = new Intent(Performance.this, GameMenu.class);
+                mainMenuIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(mainMenuIntent);
+            }
+        });
+    }
+
+    private void setupLineChart(ArrayList<Integer> scoresList) {
+        List<Entry> entries = new ArrayList<>();
+        if (scoresList != null) {
+            for (int i = 0; i < scoresList.size(); i++) {
+                entries.add(new Entry(i, scoresList.get(i)));
+            }
+        }
+
+        // Create a dataset with the entries
+        LineDataSet dataSet = new LineDataSet(entries, "Score");
+
+        dataSet.setColor(Color.parseColor("#359C5B")); // Set color to green
+        dataSet.setCircleColor(Color.parseColor("#359C5B"));
+        dataSet.setLineWidth(2f);
+        dataSet.setCircleRadius(4f);
+        dataSet.setDrawCircleHole(false);
+        dataSet.setValueTextSize(10f);
+        dataSet.setValueTextColor(Color.parseColor("#359C5B"));
+
+        // Create a LineData object with the dataset
+        LineData lineData = new LineData(dataSet);
+
+        // Set data to the chart
+        lineChart.setData(lineData);
+
+        // Customize chart appearance
+        lineChart.getDescription().setEnabled(false); // Disable description
+        lineChart.getLegend().setEnabled(false); // Disable legend
+        lineChart.getAxisLeft().setEnabled(false); // Disable left axis
+        lineChart.getAxisRight().setEnabled(false); // Disable right axis
+        lineChart.getXAxis().setEnabled(false); // Disable X-axis
+
+        // Refresh the chart
+        lineChart.invalidate();
+    }
+}
