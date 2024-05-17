@@ -7,6 +7,29 @@
     android:background="@drawable/game_activity_background"
     tools:context=".MemoryGameActivity">
 
+    <ImageButton
+        android:id="@+id/help_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="276dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Help Button"
+        android:src="@drawable/help_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/pause_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Pause Button"
+        android:src="@drawable/pause_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/circleTimer"
@@ -44,7 +67,7 @@
         android:contentDescription="@string/button_function"
         app:layout_constraintEnd_toStartOf="@+id/imageButton3"
         app:layout_constraintHorizontal_bias="0.191"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/imageButton1"
         app:layout_constraintTop_toBottomOf="@+id/circleTimer" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -70,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/circleTimer" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/imageButton"
+        android:id="@+id/imageButton1"
         android:layout_width="84dp"
         android:layout_height="84dp"
         android:layout_marginStart="40dp"

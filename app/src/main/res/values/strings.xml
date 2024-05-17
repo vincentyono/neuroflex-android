@@ -38,6 +38,8 @@
     <string name="memory_text_view">Memory</string>
     <string name="language_text_view">Language</string>
     <string name="logic_text_view">Logic</string>
+    <string name="help_button">Help Button</string>
+    <string name="pause_button">Pause Button</string>
     <string-array name="game_modes">
         <item>Math</item>
         <item>Memory</item>

@@ -1,4 +1,4 @@
-package com.example.neuroflex;
+package com.example.neuroflex.Adapters;
 
 import android.media.MediaPlayer;
 import android.text.Editable;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.neuroflex.R;
 import com.example.neuroflex.mathpuzzle.MathQuestion;
 
 import java.util.ArrayList;

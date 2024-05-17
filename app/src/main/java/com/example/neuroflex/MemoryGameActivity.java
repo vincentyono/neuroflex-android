@@ -3,9 +3,16 @@ package com.example.neuroflex;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -16,7 +23,7 @@ import java.util.List;
 public class MemoryGameActivity extends AppCompatActivity {
 
     private static final String TAG = "MemoryGameActivity";
-    private final Button[] buttons = new Button[12];
+    private final List<Button> buttons = new ArrayList<>();
     private int pairsMatched = 0;
     private int attempts = 0;
 
@@ -29,18 +36,35 @@ public class MemoryGameActivity extends AppCompatActivity {
     private boolean gameCompleted = false;
 
     private String difficultyLevel;
-
     private String gameMode;
+
+    private Handler handler = new Handler();
+    private final int FLIP_BACK_DELAY = 1000; // 1 second delay for flipping back
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_memory_game);
 
         // Get the difficulty level from the Intent
         difficultyLevel = getIntent().getStringExtra("DIFFICULTY_LEVEL");
         // Setting the gameMode for DBQuery
         gameMode = "memory";
+
+        // Load the appropriate layout based on difficulty level
+        switch (difficultyLevel) {
+            case "easy":
+                setContentView(R.layout.activity_memory_game);
+                break;
+            case "medium":
+                setContentView(R.layout.activity_memory_game_m);
+                break;
+            case "hard":
+                setContentView(R.layout.activity_memory_game_h);
+                break;
+        }
+
+        timer = findViewById(R.id.circleTimer);
+        initializeButtons();
 
         List<Integer> images = new ArrayList<>();
         images.add(R.drawable.fruit_apple);
@@ -49,42 +73,42 @@ public class MemoryGameActivity extends AppCompatActivity {
         images.add(R.drawable.fruit_pear);
         images.add(R.drawable.fruit_tomato);
         images.add(R.drawable.fruit_strawberry);
-        images.add(R.drawable.fruit_apple);
-        images.add(R.drawable.fruit_banana);
-        images.add(R.drawable.fruit_orange);
-        images.add(R.drawable.fruit_pear);
-        images.add(R.drawable.fruit_tomato);
-        images.add(R.drawable.fruit_strawberry);
-        Collections.shuffle(images);
+        images.add(R.drawable.fruit_lime);
+        images.add(R.drawable.fruit_lemon);
+        images.add(R.drawable.fruit_watermelon);
+        images.add(R.drawable.fruit_grapes);
 
-        int cardBack = R.drawable.question_mark;
+        int numPairs;
+        switch (difficultyLevel) {
+            case "easy":
+                numPairs = 6;
+                break;
+            case "medium":
+                numPairs = 8;
+                break;
+            case "hard":
+                numPairs = 10;
+                break;
+            default:
+                numPairs = 6;
+                break;
+        }
 
-        timer = findViewById(R.id.circleTimer);
-
-        // Initialize buttons array
-        buttons[0] = findViewById(R.id.imageButton);
-        buttons[1] = findViewById(R.id.imageButton2);
-        buttons[2] = findViewById(R.id.imageButton3);
-        buttons[3] = findViewById(R.id.imageButton4);
-        buttons[4] = findViewById(R.id.imageButton5);
-        buttons[5] = findViewById(R.id.imageButton6);
-        buttons[6] = findViewById(R.id.imageButton7);
-        buttons[7] = findViewById(R.id.imageButton8);
-        buttons[8] = findViewById(R.id.imageButton9);
-        buttons[9] = findViewById(R.id.imageButton10);
-        buttons[10] = findViewById(R.id.imageButton11);
-        buttons[11] = findViewById(R.id.imageButton12);
+        List<Integer> selectedImages = images.subList(0, numPairs);
+        selectedImages.addAll(selectedImages); // Duplicate the images to create pairs
+        Collections.shuffle(selectedImages);
 
         final int[] clicked = {0};
         final boolean[] turnOver = {false};
         final int[] lastClicked = {-1};
 
-        for (int i = 0; i < 12; i++) {
-            buttons[i].setBackgroundResource(cardBack);
-            buttons[i].setText("cardBack");
-            buttons[i].setTextSize(0.0F);
+        for (int i = 0; i < buttons.size(); i++) {
+            Button button = buttons.get(i);
+            button.setBackgroundResource(R.drawable.question_mark);
+            button.setText("cardBack");
+            button.setTextSize(0.0F);
             int finalI = i;
-            buttons[i].setOnClickListener(v -> {
+            button.setOnClickListener(v -> {
                 if (gameCompleted) {
                     return; // Prevent further actions if the game is completed
                 }
@@ -94,16 +118,16 @@ public class MemoryGameActivity extends AppCompatActivity {
                     startTime = System.currentTimeMillis();
                 }
 
-                if (buttons[finalI].getText().equals("cardBack") && !turnOver[0]) {
-                    buttons[finalI].setBackgroundResource(images.get(finalI));
-                    buttons[finalI].setText(String.valueOf(images.get(finalI)));
+                if (button.getText().equals("cardBack") && !turnOver[0]) {
+                    flipCard(button, selectedImages.get(finalI));
+                    button.setText(String.valueOf(selectedImages.get(finalI)));
                     if (clicked[0] == 0) {
                         lastClicked[0] = finalI;
                     }
                     clicked[0]++;
-                } else if (!buttons[finalI].getText().equals("cardBack")) {
-                    buttons[finalI].setBackgroundResource(cardBack);
-                    buttons[finalI].setText("cardBack");
+                } else if (!button.getText().equals("cardBack")) {
+                    flipCard(button, R.drawable.question_mark);
+                    button.setText("cardBack");
                     clicked[0]--;
                 }
 
@@ -111,27 +135,59 @@ public class MemoryGameActivity extends AppCompatActivity {
 
                 if (clicked[0] == 2) {
                     turnOver[0] = true;
-                    if (buttons[finalI].getText().equals(buttons[lastClicked[0]].getText())) {
-                        buttons[finalI].setClickable(false);
-                        buttons[lastClicked[0]].setClickable(false);
+                    if (button.getText().equals(buttons.get(lastClicked[0]).getText())) {
+                        button.setClickable(false);
+                        buttons.get(lastClicked[0]).setClickable(false);
                         turnOver[0] = false;
                         clicked[0] = 0;
                         pairsMatched++;
 
-                        if (pairsMatched == 6) {  // All pairs matched
-                            gameCompleted = true;
-                            if (countDownTimer != null) {
-                                countDownTimer.cancel();
-                            }
+                        if (pairsMatched == numPairs) {  // All pairs matched
                             showSuccessDialog();
                             saveGameData(true);
                         }
+                    } else {
+                        handler.postDelayed(() -> {
+                            flipCard(button, R.drawable.question_mark);
+                            button.setText("cardBack");
+                            flipCard(buttons.get(lastClicked[0]), R.drawable.question_mark);
+                            buttons.get(lastClicked[0]).setText("cardBack");
+                            turnOver[0] = false;
+                            clicked[0] = 0;
+                        }, FLIP_BACK_DELAY);
                     }
                 } else if (clicked[0] == 0) {
                     turnOver[0] = false;
                 }
             });
         }
+    }
+
+    private void initializeButtons() {
+        for (int i = 1; i <= 20; i++) {
+            int resId = getResources().getIdentifier("imageButton" + i, "id", getPackageName());
+            Button button = findViewById(resId);
+            if (button != null) {
+                buttons.add(button);
+            }
+        }
+    }
+
+    private void flipCard(View view, int drawableId) {
+        ObjectAnimator flipOut = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.flip_out);
+        ObjectAnimator flipIn = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.flip_in);
+        flipOut.setTarget(view);
+        flipIn.setTarget(view);
+
+        flipOut.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                ((Button) view).setBackgroundResource(drawableId);
+                flipIn.start();
+            }
+        });
+        flipOut.start();
     }
 
     @Override
@@ -177,6 +233,7 @@ public class MemoryGameActivity extends AppCompatActivity {
     }
 
     private void showSuccessDialog() {
+        gameCompleted = true;
         new AlertDialog.Builder(this)
                 .setTitle("Congratulations!")
                 .setMessage("You've successfully matched all pairs.")

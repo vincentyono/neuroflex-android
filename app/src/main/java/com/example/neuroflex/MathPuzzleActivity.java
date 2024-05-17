@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.neuroflex.Adapters.MathQuestionAdapter;
 import com.example.neuroflex.mathpuzzle.Difficulty;
 import com.example.neuroflex.mathpuzzle.MathQuestion;
 

@@ -1,4 +1,4 @@
-package com.example.neuroflex;
+package com.example.neuroflex.Models;
 
 import java.util.List;
 

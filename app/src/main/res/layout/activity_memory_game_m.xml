@@ -1,0 +1,240 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/game_activity_background"
+    tools:context=".MemoryGameActivity">
+
+    <ImageButton
+        android:id="@+id/help_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="276dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Help Button"
+        android:src="@drawable/help_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/pause_btn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="Pause Button"
+        android:src="@drawable/pause_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/circleTimer"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="164dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="100"
+        android:progressDrawable="@drawable/circular"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton2"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton3"
+        app:layout_constraintStart_toEndOf="@id/imageButton1"
+        app:layout_constraintTop_toBottomOf="@id/circleTimer" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton3"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton4"
+        app:layout_constraintStart_toEndOf="@id/imageButton2"
+        app:layout_constraintTop_toBottomOf="@id/circleTimer" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton4"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButton3"
+        app:layout_constraintTop_toBottomOf="@id/circleTimer" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton5"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButton1" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton6"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton7"
+        app:layout_constraintStart_toEndOf="@id/imageButton5"
+        app:layout_constraintTop_toBottomOf="@id/imageButton2" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton7"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton8"
+        app:layout_constraintStart_toEndOf="@id/imageButton6"
+        app:layout_constraintTop_toBottomOf="@id/imageButton3" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton8"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButton7"
+        app:layout_constraintTop_toBottomOf="@id/imageButton4" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/circleTimer" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton9"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton10"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButton5" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton10"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton11"
+        app:layout_constraintStart_toEndOf="@id/imageButton9"
+        app:layout_constraintTop_toBottomOf="@id/imageButton6" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton11"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton12"
+        app:layout_constraintStart_toEndOf="@id/imageButton10"
+        app:layout_constraintTop_toBottomOf="@id/imageButton7" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton12"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButton11"
+        app:layout_constraintTop_toBottomOf="@id/imageButton8" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton13"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButton9" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton15"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton16"
+        app:layout_constraintStart_toEndOf="@id/imageButton14"
+        app:layout_constraintTop_toBottomOf="@id/imageButton11" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton14"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toStartOf="@id/imageButton15"
+        app:layout_constraintStart_toEndOf="@id/imageButton13"
+        app:layout_constraintTop_toBottomOf="@id/imageButton10" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/imageButton16"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_margin="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/question_mark"
+        android:contentDescription="@string/button_function"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButton15"
+        app:layout_constraintTop_toBottomOf="@id/imageButton12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

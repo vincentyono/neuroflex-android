@@ -14,10 +14,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.Timestamp;
+import com.example.neuroflex.Models.LangQuestion;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class LanguageGame extends AppCompatActivity {
