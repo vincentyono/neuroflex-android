@@ -432,7 +432,12 @@ public class DbQuery {
                                 listener.onAverageStatsLoaded(modeStats);
                                 return;
                             }
-                            listener.onFailure(new Exception("No games played for the specified mode"));
+                            // If no games played, return average stats with all values set to 0
+                            Map<String, Double> modeStats = new HashMap<>();
+                            modeStats.put("Speed", 0.0);
+                            modeStats.put("Time", 0.0);
+                            modeStats.put("Accuracy", 0.0);
+                            listener.onAverageStatsLoaded(modeStats);
                             return;
                         }
                         listener.onFailure(new Exception("Specified game mode not found"));

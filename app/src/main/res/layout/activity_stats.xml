@@ -19,7 +19,7 @@
     <LinearLayout
         android:id="@+id/scoreBox"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="200dp"
         android:layout_below="@id/textPerformance"
         android:layout_marginTop="20dp"
         android:layout_marginStart="30dp"
@@ -37,20 +37,69 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Total Daily Scores"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp" />
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="10dp" />
+            android:layout_height="130dp"
+            android:layout_margin="8dp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gameModeSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scoreBox"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Game Mode:"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"/>
+
+        <Spinner
+            android:id="@+id/gameSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentStart="true"
+            android:entries="@array/game_modes" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/gameStatsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameModeSelector"
+        android:text="Your Performance in Each Game"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp" />
 
     <LinearLayout
         android:id="@+id/barChartContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/scoreBox"
+        android:layout_below="@id/gameStatsText"
         android:orientation="vertical"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="18dp"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp">
 

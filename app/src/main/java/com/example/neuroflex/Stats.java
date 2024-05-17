@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -20,7 +23,6 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.Timestamp;
 
@@ -34,6 +36,7 @@ public class Stats extends AppCompatActivity {
     private HorizontalBarChart accuracyBarChart;
     private HorizontalBarChart timeBarChart;
     private LineChart lineChart;
+    private int gameIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,50 +47,64 @@ public class Stats extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_stats);
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.bottom_home) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-                return true;
-            } else if (itemId == R.id.bottom_game) {
-                startActivity(new Intent(getApplicationContext(), GameMenu.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-                return true;
-            } else if (itemId == R.id.bottom_stats) {
-                return true;
-            } else if (itemId == R.id.bottom_leaderboard) {
-                startActivity(new Intent(getApplicationContext(), Leaderboard.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-                return true;
-            }
-            return false;
-        });
-
         // Initialize views
         speedBarChart = findViewById(R.id.speedChart);
         accuracyBarChart = findViewById(R.id.accuracyChart);
         timeBarChart = findViewById(R.id.timeChart);
         lineChart = findViewById(R.id.lineChart);
 
+        Spinner gameModeSpinner = findViewById(R.id.gameSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.game_modes, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        gameModeSpinner.setAdapter(adapter);
+
+        gameModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                gameIndex = position;
+                loadStatsForSelectedGameMode();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.e(TAG, "No mode selected");
+            }
+        });
+
         // Get daily scores and set up the charts
+        loadStatsForSelectedGameMode();
+    }
+
+    private void loadStatsForSelectedGameMode() {
         DbQuery.getDailyScores(new DbQuery.DailyScoresListener() {
             @Override
             public void onSuccess(List<Map<String, Object>> dailyScores) {
                 // Set up the line chart
                 setupLineChart(dailyScores);
 
-                // Once daily scores are loaded, get average stats for each game mode
-                DbQuery.getAverageStats(2, new DbQuery.OnAverageStatsLoadedListener() {
+                // Once daily scores are loaded, get average stats for the selected game mode
+                DbQuery.getAverageStats(gameIndex, new DbQuery.OnAverageStatsLoadedListener() {
                     @Override
                     public void onAverageStatsLoaded(Map<String, Double> modeStats) {
                         Log.d(TAG, "Average Stats Loaded: " + modeStats);
-                        setupBarChart(speedBarChart,modeStats.get("Speed"));
-                        setupBarChart(accuracyBarChart, modeStats.get("Accuracy"));
-                        setupBarChart(timeBarChart, modeStats.get("Time"));
+                        // Clears bar charts
+                        speedBarChart.clear();
+                        accuracyBarChart.clear();
+                        timeBarChart.clear();
+
+                        // Check if modeStats is null or empty
+                        if (modeStats.get("Speed") == 0 && modeStats.get("Accuracy") == 0 && modeStats.get("Time") == 0) {
+                            // Display "Mode never played"
+                            speedBarChart.setNoDataText("Mode never played");
+                            accuracyBarChart.setNoDataText("Mode never played");
+                            timeBarChart.setNoDataText("Mode never played");
+                        } else {
+                            // Sets up bar charts with new data
+                            setupBarChart(speedBarChart, modeStats.get("Speed"));
+                            setupBarChart(accuracyBarChart, modeStats.get("Accuracy"));
+                            setupBarChart(timeBarChart, modeStats.get("Time"));
+                        }
                     }
 
                     @Override
@@ -148,6 +165,7 @@ public class Stats extends AppCompatActivity {
 
     private void setupBarChart(HorizontalBarChart barChart, double value) {
         List<BarEntry> entries = new ArrayList<>();
+
         entries.add(new BarEntry(0, (float) value));
 
         BarDataSet dataSet = new BarDataSet(entries, "Input Value");
@@ -185,5 +203,7 @@ public class Stats extends AppCompatActivity {
 
         // Refresh the chart
         barChart.invalidate();
+
+        Log.d(TAG, "Bar chart setup complete");
     }
 }
