@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="15dp"
+    android:padding="25dp"
     android:layout_height="match_parent"
     tools:context=".Register">
 
@@ -18,10 +18,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:text="@string/desc_reg"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/profile_image"-->
+<!--        android:layout_width="75dp"-->
+<!--        android:layout_height="75dp"-->
+<!--        android:src="@drawable/img_placeholder"-->
+<!--        android:contentDescription="@string/profile_image" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:id="@+id/btn_select_image"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/select_image" />-->
+
     <!--  name   -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/name"
@@ -33,7 +56,8 @@
     <!--  email   -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
@@ -45,7 +69,8 @@
     <!--  password   -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
@@ -60,10 +85,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_button_blue"
         android:text="@string/register"
-        android:layout_width="wrap_content"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView

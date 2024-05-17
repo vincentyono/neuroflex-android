@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Header
         button =  findViewById(R.id.logout);
-        textView = findViewById(R.id.user_details);
+//        textView = findViewById(R.id.user_details);
         TextView textViewName = findViewById(R.id.display_name);
 
         // Navigation
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.bottom_stats) {
-                startActivity(new Intent(getApplicationContext(), Stats.class));
+                startActivity(new Intent(getApplicationContext(), PersonalStats.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
@@ -72,17 +72,18 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            textView.setText(user.getEmail());
+            // Display user details
+//            textView.setText(user.getEmail());
 
             String userId = user.getUid();
 
             // Get the user's name
-            db.collection("users").document(userId).get()
+            db.collection("USERS").document(userId).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                String name = document.getString("name");
+                                String name = document.getString("NAME");
                                 textViewName.setText(name); // Set the user's name to TextView
                             } else {
                                 Log.d("MainActivity", "No such document");
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), Login.class);
+                Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
                 startActivity(intent);
                 finish();
             }

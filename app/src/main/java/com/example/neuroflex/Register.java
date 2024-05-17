@@ -20,11 +20,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Register extends AppCompatActivity {
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     TextInputEditText editTextName, editTextEmail, editTextPassword;
     Button buttonReg;
@@ -90,35 +95,48 @@ public class Register extends AppCompatActivity {
                 }
 
                 mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    if (user != null) {
-                                        // Save the user's name in db.
-                                        Map<String, Object> userMap = new HashMap<>();
-                                        userMap.put("name", name);
-                                        db.collection("users").document(user.getUid()).set(userMap)
-                                                .addOnSuccessListener(aVoid -> {
-                                                    Log.d("Register", "User profile updated.");
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Log.w("Register", "Error updating user profile.", e);
-                                                });
+                        .addOnCompleteListener(Register.this, task -> {
+                            progressBar.setVisibility(View.GONE);
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Register.this, "Account created.", Toast.LENGTH_SHORT).show();
+                                DbQuery.createUserData(email, name, new MyCompleteListener(){
 
-                                        // Success pop up.
-                                        Toast.makeText(Register.this, "Account created.", Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onSuccess() {
                                         Intent intent = new Intent(getApplicationContext(), Login.class);
                                         startActivity(intent);
                                         finish();
                                     }
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Register.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+
+                                    @Override
+                                    public void onFailure() {
+                                        Toast.makeText(Register.this, "Something went wrong. Try again later!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+//                                    FirebaseUser user = mAuth.getCurrentUser();
+//                                    if (user != null) {
+//
+//                                        Toast.makeText(Register.this, "Account created.", Toast.LENGTH_SHORT).show();
+//                                        Intent intent = new Intent(getApplicationContext(), Login.class);
+//                                        startActivity(intent);
+//                                        finish();
+//
+//                                        // Save the user's name in db.
+////                                        Map<String, Object> userMap = new HashMap<>();
+////                                        userMap.put("name", name);
+////                                        db.collection("users").document(user.getUid()).set(userMap)
+////                                                .addOnSuccessListener(aVoid -> {
+////                                                    Log.d("Register", "User profile updated.");
+////                                                })
+////                                                .addOnFailureListener(e -> {
+////                                                    Log.w("Register", "Error updating user profile.", e);
+////                                                });
+//                                    }
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Toast.makeText(Register.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
 

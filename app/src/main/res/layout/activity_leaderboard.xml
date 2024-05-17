@@ -8,25 +8,40 @@
     android:gravity="center"
     tools:context=".Leaderboard">
 
-    <!-- Display Name TextView at the top left -->
-    <TextView
-        android:id="@+id/display_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/name_here"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Leaderboard"
-        android:textColor="@color/blue"
-        android:layout_centerInParent="true"
-        android:textSize="36sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/currentUserRank"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/your_rank"-->
+<!--            android:textSize="18sp"-->
+<!--            android:padding="16dp"/>-->
+
+        <include
+            layout="@layout/leaderboard_header"
+            android:layout_width="match_parent"
+            android:layout_height="152dp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="70dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/leaderboardRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"/>
+        </FrameLayout>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
