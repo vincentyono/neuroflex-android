@@ -136,12 +136,15 @@ public class GameModeSelect extends AppCompatActivity {
         switch (selectedGameMode) {
             case "math":
                 intent = new Intent(GameModeSelect.this, MathPuzzleActivity.class);
+                finish();
                 break;
             case "memory":
                 intent = new Intent(GameModeSelect.this, MemoryGameActivity.class);
+                finish();
                 break;
             case "language":
                 intent = new Intent(GameModeSelect.this, LanguageGame.class);
+                finish();
                 break;
             default:
                 throw new IllegalArgumentException("Unexpected game type: " + selectedGameMode);
