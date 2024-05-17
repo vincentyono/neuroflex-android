@@ -26,6 +26,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+<!--    <ImageView-->
+<!--        android:id="@+id/profile_image"-->
+<!--        android:layout_width="75dp"-->
+<!--        android:layout_height="75dp"-->
+<!--        android:src="@drawable/img_placeholder"-->
+<!--        android:contentDescription="@string/profile_image" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:id="@+id/btn_select_image"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/select_image" />-->
+
     <!--  name   -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
