@@ -375,24 +375,119 @@ public class DbQuery {
         });
     }
 
+    public static void getDailyScores(DailyScoresListener listener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        g_firestore.collection("USERS")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                List<Map<String, Object>> dailyScores = (List<Map<String, Object>>) document.get("DAILY_SCORES");
+                                if (dailyScores != null) {
+                                    listener.onSuccess(dailyScores);
+                                } else {
+                                    listener.onFailure(new Exception("No daily scores found"));
+                                }
+                            } else {
+                                listener.onFailure(new Exception("No such document"));
+                            }
+                        } else {
+                            listener.onFailure(task.getException());
+                        }
+                    }
+                });
+    }
+
+    public static void getAverageStats(int gameIndex, OnAverageStatsLoadedListener listener) {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);
+
+        performanceDoc.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document != null && document.exists()) {
+                    Map<String, Object> gameData = document.getData();
+                    if (gameData != null && gameData.containsKey("GAME_DATA")) {
+                        Map<String, Object> gameModes = (Map<String, Object>) gameData.get("GAME_DATA");
+                        String gameIndexKey = String.valueOf(gameIndex);
+                        if (gameModes != null && gameModes.containsKey(gameIndexKey)) {
+                            Map<String, Object> gameModeData = (Map<String, Object>) gameModes.get(gameIndexKey);
+                            Long gamesPlayedLong = (Long) gameModeData.getOrDefault("GAMES_PLAYED", 0L);
+                            int gamesPlayed = gamesPlayedLong != null ? gamesPlayedLong.intValue() : 0;
+                            if (gamesPlayed > 0) {
+                                double speed = ((Number) gameModeData.getOrDefault("SPEED", 0)).doubleValue();
+                                double time = ((Number) gameModeData.getOrDefault("TIME", 0)).doubleValue();
+                                double accuracy = ((Number) gameModeData.getOrDefault("ACCURACY", 0)).doubleValue();
+                                double averageSpeed = speed / gamesPlayed;
+                                double averageTime = time / gamesPlayed;
+                                double averageAccuracy = accuracy / gamesPlayed;
+                                Map<String, Double> modeStats = new HashMap<>();
+                                modeStats.put("Speed", averageSpeed);
+                                modeStats.put("Time", averageTime);
+                                modeStats.put("Accuracy", averageAccuracy);
+                                listener.onAverageStatsLoaded(modeStats);
+                                return;
+                            }
+                            // If no games played, return average stats with all values set to 0
+                            Map<String, Double> modeStats = new HashMap<>();
+                            modeStats.put("Speed", 0.0);
+                            modeStats.put("Time", 0.0);
+                            modeStats.put("Accuracy", 0.0);
+                            listener.onAverageStatsLoaded(modeStats);
+                            return;
+                        }
+                        listener.onFailure(new Exception("Specified game mode not found"));
+                        return;
+                    }
+                    listener.onFailure(new Exception("Game data not found"));
+                    return;
+                }
+                listener.onFailure(new Exception("Document does not exist"));
+                return;
+            }
+            listener.onFailure(task.getException());
+        });
+    }
+
+    // Interface to listen to average stats
+    public interface OnAverageStatsLoadedListener {
+        void onAverageStatsLoaded(Map<String, Double> modeStats);
+        void onFailure(Exception e);
+    }
+
+
     // Utility function to check if two timestamps represent the same date
     private static boolean isSameDate(Timestamp timestamp1, Timestamp timestamp2) {
         return timestamp1.toDate().equals(timestamp2.toDate());
     }
 
+    // Interface to listen to question loaders
     public interface OnQuestionsLoadedListener {
         void onQuestionsLoaded(List<LangQuestion> questions);
     }
 
+    // Interface for top score listener
     public interface OnTopScoreLoadedListener {
         void onTopScoreLoaded(int topScore);
     }
 
+    // Interface for total score listener
     public interface OnTotalScoreLoadedListener {
         void onTotalScoreLoaded(int totalScore);
     }
 
+    // Interface to check if daily scores have been loaded
     public interface OnDailyScoresLoadedListener {
         void onDailyScoresLoaded(ArrayList<Integer> dailyScores);
+    }
+
+    // Interface for daily score listener
+    public interface DailyScoresListener {
+        void onSuccess(List<Map<String, Object>> dailyScores);
+        void onFailure(Exception e);
     }
 }

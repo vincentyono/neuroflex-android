@@ -1,39 +1,188 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     tools:context=".Stats">
 
-    <!-- Display Name TextView at the top left -->
     <TextView
-        android:id="@+id/display_name"
+        android:id="@+id/textPerformance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/name_here"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        />
+        android:text="Performance"
+        android:textSize="40sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="30dp"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/scoreBox"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/textPerformance"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/round_corners"
+        android:orientation="vertical"
+        android:elevation="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score Evolution"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Total Daily Scores"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_margin="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/gameModeSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scoreBox"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Game Mode:"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"/>
+
+        <Spinner
+            android:id="@+id/gameSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentStart="true"
+            android:entries="@array/game_modes" />
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/gameStatsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stats"
-        android:textColor="@color/blue"
-        android:layout_centerInParent="true"
-        android:textSize="36sp" />
+        android:layout_below="@id/gameModeSelector"
+        android:text="Your Performance in Each Game"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp" />
+
+    <LinearLayout
+        android:id="@+id/barChartContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameStatsText"
+        android:orientation="vertical"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginEnd="35dp">
+
+        <LinearLayout
+            android:id="@+id/accuracySection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:textSize="15sp"
+                android:textColor="@android:color/black"
+                android:text="Accuracy"
+                android:layout_marginEnd="8dp" />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/accuracyChart"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/speedSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:textSize="15sp"
+                android:textColor="@android:color/black"
+                android:text="Speed"
+                android:layout_marginEnd="8dp" />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/speedChart"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/timeSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:textSize="15sp"
+                android:textColor="@android:color/black"
+                android:text="Time"
+                android:layout_marginEnd="8dp" />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:id="@+id/timeChart"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp" />
+        </LinearLayout>
+    </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="30dp"
         android:background="@drawable/bottom_background"
         android:elevation="2dp"
         app:itemIconSize="37dp"
@@ -41,5 +190,4 @@
         app:itemRippleColor="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_menu" />
-
 </RelativeLayout>
