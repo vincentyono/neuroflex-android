@@ -1,13 +1,10 @@
 package com.example.neuroflex;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class GameMenu extends AppCompatActivity {
@@ -20,25 +17,30 @@ public class GameMenu extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_game);
 
-        // Get the ImageView
+        // Get the ImageViews
         ImageView imageViewGame = findViewById(R.id.imageViewGame);
         ImageView imageViewGame2 = findViewById(R.id.imageViewGame2);
+        ImageView imageViewGame3 = findViewById(R.id.imageViewGame3);
 
-        // Set the OnClickListener
+        // Set the OnClickListener for each game type
         imageViewGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameMenu.this, MathPuzzleActivity.class);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                startActivity(intent);
+                openGameModeSelectActivity("math");
             }
         });
+
         imageViewGame2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GameMenu.this, MemoryGameActivity.class);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                startActivity(intent);
+                openGameModeSelectActivity("memory");
+            }
+        });
+
+        imageViewGame3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGameModeSelectActivity("language");
             }
         });
 
@@ -65,5 +67,11 @@ public class GameMenu extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    private void openGameModeSelectActivity(String gameType) {
+        Intent intent = new Intent(GameMenu.this, GameModeSelect.class);
+        intent.putExtra("GAME_TYPE", gameType);
+        startActivity(intent);
     }
 }

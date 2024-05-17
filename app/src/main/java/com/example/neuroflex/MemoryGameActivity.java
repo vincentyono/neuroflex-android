@@ -5,10 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
-
-import com.example.neuroflex.R.drawable.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,19 +15,32 @@ import java.util.List;
 
 public class MemoryGameActivity extends AppCompatActivity {
 
+    private static final String TAG = "MemoryGameActivity";
     private final Button[] buttons = new Button[12];
     private int pairsMatched = 0;
+    private int attempts = 0;
 
+    private long startTime;
     private ProgressBar timer;
     private CountDownTimer countDownTimer;
     private final long totalTime = 30000;  // Total time for countdown in milliseconds (e.g., 30 seconds)
     private final long interval = 1000;  // Interval to count down (e.g., every second)
     private boolean timerStarted = false;
+    private boolean gameCompleted = false;
+
+    private String difficultyLevel;
+
+    private String gameMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memory_game);
+
+        // Get the difficulty level from the Intent
+        difficultyLevel = getIntent().getStringExtra("DIFFICULTY_LEVEL");
+        // Setting the gameMode for DBQuery
+        gameMode = "memory";
 
         List<Integer> images = new ArrayList<>();
         images.add(R.drawable.fruit_apple);
@@ -73,9 +85,13 @@ public class MemoryGameActivity extends AppCompatActivity {
             buttons[i].setTextSize(0.0F);
             int finalI = i;
             buttons[i].setOnClickListener(v -> {
+                if (gameCompleted) {
+                    return; // Prevent further actions if the game is completed
+                }
                 if (!timerStarted) {
                     startCountdown();
                     timerStarted = true;
+                    startTime = System.currentTimeMillis();
                 }
 
                 if (buttons[finalI].getText().equals("cardBack") && !turnOver[0]) {
@@ -91,6 +107,8 @@ public class MemoryGameActivity extends AppCompatActivity {
                     clicked[0]--;
                 }
 
+                attempts++;
+
                 if (clicked[0] == 2) {
                     turnOver[0] = true;
                     if (buttons[finalI].getText().equals(buttons[lastClicked[0]].getText())) {
@@ -101,7 +119,12 @@ public class MemoryGameActivity extends AppCompatActivity {
                         pairsMatched++;
 
                         if (pairsMatched == 6) {  // All pairs matched
+                            gameCompleted = true;
+                            if (countDownTimer != null) {
+                                countDownTimer.cancel();
+                            }
                             showSuccessDialog();
+                            saveGameData(true);
                         }
                     }
                 } else if (clicked[0] == 0) {
@@ -111,6 +134,7 @@ public class MemoryGameActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (countDownTimer != null) {
@@ -121,15 +145,23 @@ public class MemoryGameActivity extends AppCompatActivity {
     private void startCountdown() {
         countDownTimer = new CountDownTimer(totalTime, interval) {
             public void onTick(long millisUntilFinished) {
+                if (gameCompleted) {
+                    countDownTimer.cancel(); // Stop the timer if the game is completed
+                    return;
+                }
                 // Update progress bar
                 int progress = (int) (millisUntilFinished / (totalTime / 100));
                 timer.setProgress(progress);
             }
 
             public void onFinish() {
+                if (gameCompleted) {
+                    return;
+                }
                 timer.setProgress(0);
                 // Handle completion of countdown
                 showTimeUpDialog();
+                saveGameData(false);
             }
         }.start();
     }
@@ -154,4 +186,60 @@ public class MemoryGameActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void saveGameData(boolean success) {
+        long endTime = System.currentTimeMillis();
+        long timeTakenMillis = endTime - startTime;
+        double timeTakenSeconds = timeTakenMillis / 1000.0;
+        double accuracy = pairsMatched / (double) attempts;
+        double speed = pairsMatched / timeTakenSeconds; // pairs per second
+
+        int baseScore = 10 * pairsMatched;
+        int timeBonus = (int) (1000 / timeTakenSeconds);
+        int accuracyBonus = (int) (100 * accuracy);
+
+        int currentScore = baseScore + timeBonus + accuracyBonus;
+
+        // Assuming the gameIndex for memory is 1
+        int gameIndex = 1;
+        List<Integer> scores = new ArrayList<>(); // No scores for memory, but we need to pass an empty list
+
+        Log.d(TAG, "Saving game data with the following metrics:");
+        Log.d(TAG, "Time taken: " + timeTakenSeconds);
+        Log.d(TAG, "Accuracy: " + accuracy);
+        Log.d(TAG, "Speed: " + speed);
+        Log.d(TAG, "Current Score: " + currentScore);
+
+        // Updates game parameters
+        DbQuery.updateGameParams(gameIndex, accuracy, speed, timeTakenSeconds, currentScore, new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "Game parameters updated successfully");
+                // Gets the top score
+                DbQuery.getTopScore(gameIndex, new DbQuery.OnTopScoreLoadedListener() {
+                    @Override
+                    public void onTopScoreLoaded(int topScore) {
+                        Log.d(TAG, "Top score retrieved successfully: " + topScore);
+
+                        // Stores the game data
+                        DbQuery.storeGame(gameMode, difficultyLevel, scores, new MyCompleteListener() {
+                            @Override
+                            public void onSuccess() {
+                                Log.d(TAG, "Game data stored successfully");
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                Log.d(TAG, "Failed to store game data");
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure() {
+                Log.d(TAG, "Failed to update game data");
+            }
+        });
+    }
 }
