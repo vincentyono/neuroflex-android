@@ -119,6 +119,10 @@ public class MemoryGameActivity extends AppCompatActivity {
                         pairsMatched++;
 
                         if (pairsMatched == 6) {  // All pairs matched
+                            gameCompleted = true;
+                            if (countDownTimer != null) {
+                                countDownTimer.cancel();
+                            }
                             showSuccessDialog();
                             saveGameData(true);
                         }
