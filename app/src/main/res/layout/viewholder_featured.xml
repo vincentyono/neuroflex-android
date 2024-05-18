@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginRight="5dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/featured_image"
@@ -27,9 +28,10 @@
         android:layout_marginTop="16dp"
         android:padding="4dp"
         android:text="Title"
+        android:textStyle="bold"
         android:textAlignment="textEnd"
-        android:textColor="@color/light_blue"
-        android:textSize="25sp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@id/featured_image"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +41,8 @@
         android:id="@+id/featured_description"
         android:layout_width="298dp"
         android:layout_height="46dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="14dp"
+        android:textColor="@color/white"
         android:text="Article description here. It might be a bit long so testing it out with this placeholder."
         android:textAlignment="textEnd"
         android:textSize="17sp"

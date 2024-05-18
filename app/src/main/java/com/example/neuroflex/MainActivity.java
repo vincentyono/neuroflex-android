@@ -188,7 +188,8 @@ public class MainActivity extends AppCompatActivity {
                 // Set click listener to navigate to GameMode
                 findViewById(R.id.todaysGamePick).setOnClickListener(v -> {
                     Intent intent = new Intent(MainActivity.this, GameModeSelect.class);
-                    intent.putExtra("game_title", title);
+                    assert title != null;
+                    intent.putExtra("GAME_TYPE", title.toLowerCase()); // Make sure this matches what GameModeSelect expects
                     startActivity(intent);
                 });
             }

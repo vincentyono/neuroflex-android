@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -26,6 +28,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity {
 
@@ -75,7 +79,6 @@ public class Register extends AppCompatActivity {
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
                 String name, email, password;
                 name = String.valueOf(editTextName.getText());
                 email = String.valueOf(editTextEmail.getText());
@@ -93,6 +96,18 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(Register.this, "Enter password", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(Register.this, "Enter a valid email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (!isValidPassword(password)) {
+                    Toast.makeText(Register.this, "Password must be at least 6 characters long, contain at least one capital letter, and one number.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                progressBar.setVisibility(View.VISIBLE);
 
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(Register.this, task -> {
@@ -135,12 +150,25 @@ public class Register extends AppCompatActivity {
 //                                    }
                             } else {
                                 // If sign in fails, display a message to the user.
-                                Toast.makeText(Register.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                    Toast.makeText(Register.this, "This email is already registered.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(Register.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
 
+
+
             }
         });
+    }
+
+    // Function to validate password
+    private boolean isValidPassword(String password) {
+        // Minimum 6 characters, at least one uppercase letter and one number
+        Pattern pattern = Pattern.compile("^(?=.*[A-Z])(?=.*\\d).{6,}$");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 }

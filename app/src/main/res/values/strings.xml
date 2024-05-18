@@ -5,8 +5,8 @@
     <string name="password">Password</string>
     <string name="register">Create an account</string>f
     <string name="full_name">Full name</string>
-    <string name="click_to_login">Already have an account</string>
-    <string name="click_to_register">Create a new account</string>
+    <string name="click_to_login">Already have an account? Login here</string>
+    <string name="click_to_register">Don\'t have an account yet? Register here</string>
     <string name="logout">Logout</string>
     <string name="name_here">Name here.</string>
     <string name="open_nav">Open Navigation Drawer</string>
