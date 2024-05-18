@@ -85,8 +85,14 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name="com.example.neuroflex.PauseGame" />
-        <activity android:name="com.example.neuroflex.HowToPlayActivity" />
+        <activity
+            android:name="com.example.neuroflex.PauseGame"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
+        <activity
+            android:name="com.example.neuroflex.HowToPlayActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Light.NoActionBar" />
     </application>
 
 </manifest>

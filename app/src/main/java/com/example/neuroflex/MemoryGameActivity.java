@@ -122,6 +122,8 @@ public class MemoryGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
+                Bundle b = new Bundle();
+                b.putString("GAME_ACTIVITY", "MEMORY_GAME");
                 startActivity(intent);
             }
         });

@@ -41,7 +41,7 @@
     <string name="help_button">Help Button</string>
     <string name="pause_button">Pause Button</string>
     <string name="next_button">Next</string>
-    <string name="skip_button">Skip</string>
+    <string name="finish_button">Finish</string>
     <string name="resume_button">Resume</string>
     <string name="how_to_play_button">How to play</string>
     <string name="restart_button">Restart</string>
@@ -55,10 +55,11 @@
         <item>Memory</item>
         <item>Language</item>
     </string-array>
-    <string-array name="how_to_play_contents">
-        <item>Mathematics is fun</item>
-        <item>Memory game is fun</item>
-        <item>Logic game is fun</item>
-        <item>Language game is fun</item>
-    </string-array>
+    <string name="how_to_play_math">
+
+    </string>
+    <string name="how_to_play_lang">
+    </string>
+    <string name="how_to_play_mem">
+    </string>
 </resources>

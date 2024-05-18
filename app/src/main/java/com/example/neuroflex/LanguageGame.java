@@ -55,33 +55,7 @@ public class LanguageGame extends AppCompatActivity {
     // Question counter variables
     private TextView questionCounterTextView;
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.timer.cancel();
-        this.timer = new CountDownTimer(remainingTime * 1000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                remainingTime = (int) (millisUntilFinished / 1000);
-                // Calculate progress percentage
-                int progress = (int) ((millisUntilFinished / 30000.0) * 100);
-                // Set progress to the ProgressBar
-                ProgressBar progressBar = findViewById(R.id.circleTimer);
-                progressBar.setProgress(progress);
-            }
 
-            public void onFinish() {
-                // Skip question if user doesn't answer on time
-                currentQuestionIndex++;
-                loadQuestion();
-            }
-        };
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.timer.start();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +88,9 @@ public class LanguageGame extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
+                Bundle b = new Bundle();
+                b.putString("GAME_ACTIVITY", "LANGUAGE_GAME");
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });
@@ -303,5 +280,33 @@ public class LanguageGame extends AppCompatActivity {
         double totalTimeInSeconds = (double) time / 1000.0;
         String totalTimeString = String.format("%.2f", totalTimeInSeconds);
         return Double.parseDouble(totalTimeString);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.timer.cancel();
+        this.timer = new CountDownTimer(remainingTime * 1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                remainingTime = (int) (millisUntilFinished / 1000);
+                // Calculate progress percentage
+                int progress = (int) ((millisUntilFinished / 30000.0) * 100);
+                // Set progress to the ProgressBar
+                ProgressBar progressBar = findViewById(R.id.circleTimer);
+                progressBar.setProgress(progress);
+            }
+
+            public void onFinish() {
+                // Skip question if user doesn't answer on time
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(this.timer == null) return;
+        this.timer.start();
     }
 }

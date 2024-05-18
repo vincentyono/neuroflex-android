@@ -120,7 +120,7 @@ public class MathPuzzleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), PauseGame.class);
                 Bundle b = new Bundle();
-                b.putString("REMAINING_TIME", Integer.toString(_remainingTime));
+                b.putString("GAME_ACTIVITY", "MATH_PUZZLE");
                 intent.putExtras(b);
                 startActivity(intent);
             }
@@ -129,6 +129,9 @@ public class MathPuzzleActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
+                Bundle b = new Bundle();
+                b.putString("GAME_ACTIVITY", "MATH_PUZZLE");
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });

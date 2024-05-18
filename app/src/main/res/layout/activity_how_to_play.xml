@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="@+id/top_guide">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/how_to_play_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/how_to_play_title"
@@ -30,40 +30,28 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/how_to_play_content"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginVertical="18dp"
             android:text="@string/how_to_play_content"
             android:textColor="@color/white"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/finish_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintTop_toBottomOf="@+id/how_to_play_title" />
 
         <Button
-            android:id="@+id/next_button"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"
-            android:text="@string/next_button"
+            android:id="@+id/finish_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/content" />
-
-        <Button
-            android:id="@+id/skip_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:backgroundTint="@color/white"
-            android:text="@string/skip_button"
+            android:text="@string/finish_button"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/next_button" />
+            tools:layout_editor_absoluteY="176dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
