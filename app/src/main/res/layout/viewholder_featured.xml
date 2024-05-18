@@ -5,46 +5,48 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/featured_image"
         android:background="@drawable/game_background"
-        android:id="@+id/game_image"
-        android:paddingLeft="100dp"
+        app:shapeAppearanceOverlay="@style/RoundedSquare"
+        android:scaleType="centerCrop"
         android:layout_width="375dp"
         android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/game_language"
-        android:contentDescription="@string/image_of_the_game" />
+        tools:srcCompat="@drawable/placeholder"
+        android:contentDescription="@string/image_of_the_article" />
 
     <TextView
-        android:id="@+id/game_title"
-        android:layout_width="194dp"
-        android:layout_height="52dp"
+        android:id="@+id/featured_title"
+        android:layout_width="340dp"
+        android:layout_height="48dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:padding="4dp"
-        android:text="@string/text_here"
-        android:textAlignment="viewStart"
-        android:textColor="@color/orange"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="@id/game_image"
+        android:text="Title"
+        android:textAlignment="textEnd"
+        android:textColor="@color/light_blue"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@id/featured_image"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/game_description"
-        android:layout_width="138dp"
-        android:layout_height="44dp"
+        android:id="@+id/featured_description"
+        android:layout_width="298dp"
+        android:layout_height="46dp"
         android:layout_marginBottom="16dp"
-        android:text="Game description here."
+        android:text="Article description here. It might be a bit long so testing it out with this placeholder."
+        android:textAlignment="textEnd"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.067"
+        app:layout_constraintHorizontal_bias="0.701"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_title"
+        app:layout_constraintTop_toBottomOf="@+id/featured_title"
         app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

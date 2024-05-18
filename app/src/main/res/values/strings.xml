@@ -40,6 +40,9 @@
     <string name="logic_text_view">Logic</string>
     <string name="help_button">Help Button</string>
     <string name="pause_button">Pause Button</string>
+    <string name="text_here">Text here</string>
+    <string name="image_of_the_game">Image of the game</string>
+    <string name="image_of_the_article">image of the article</string>
     <string-array name="game_modes">
         <item>Math</item>
         <item>Memory</item>
