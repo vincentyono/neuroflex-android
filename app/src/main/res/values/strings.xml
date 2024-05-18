@@ -55,5 +55,10 @@
         <item>Memory</item>
         <item>Language</item>
     </string-array>
-
+    <string-array name="how_to_play_contents">
+        <item>Mathematics is fun</item>
+        <item>Memory game is fun</item>
+        <item>Logic game is fun</item>
+        <item>Language game is fun</item>
+    </string-array>
 </resources>

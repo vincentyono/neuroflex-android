@@ -8,6 +8,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +25,8 @@ import java.util.List;
 public class MemoryGameActivity extends AppCompatActivity {
 
     private static final String TAG = "MemoryGameActivity";
+    private ImageView pauseButton;
+    private ImageView helpButton;
     private final List<Button> buttons = new ArrayList<>();
     private int pairsMatched = 0;
     private int attempts = 0;
@@ -102,6 +106,26 @@ public class MemoryGameActivity extends AppCompatActivity {
         final boolean[] turnOver = {false};
         final int[] lastClicked = {-1};
 
+        pauseButton = findViewById(R.id.pause_btn);
+        helpButton = findViewById(R.id.help_btn);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PauseGame.class);
+                Bundle b = new Bundle();
+                b.putString("GAME_ACTIVITY", "MEMORY_GAME");
+                startActivity(intent);
+            }
+        });
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
+                startActivity(intent);
+            }
+        });
+
         for (int i = 0; i < buttons.size(); i++) {
             Button button = buttons.get(i);
             button.setBackgroundResource(R.drawable.question_mark);
@@ -161,6 +185,15 @@ public class MemoryGameActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void initializeButtons() {
