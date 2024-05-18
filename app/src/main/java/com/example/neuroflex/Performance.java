@@ -3,6 +3,7 @@ package com.example.neuroflex;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,7 +24,7 @@ public class Performance extends AppCompatActivity {
 
     private Button btnFinish;
     private LineChart lineChart;
-    private TextView scoreText;
+    private TextView scoreText, objectiveText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +34,28 @@ public class Performance extends AppCompatActivity {
         btnFinish = findViewById(R.id.btnNext);
         scoreText = findViewById(R.id.scoreView);
         lineChart = findViewById(R.id.lineChart);
+        objectiveText = findViewById(R.id.objectiveTextView);
 
         Intent intent = getIntent();
         ArrayList<Integer> scoresList = intent.getIntegerArrayListExtra("scoresList");
         int score = intent.getIntExtra("score", 0);
 
         scoreText.setText(String.valueOf(score));
+
+        // Setting objective text based on rank
+        DbQuery.getUserTotalScore(new TotalScoreListener() {
+            @Override
+            public void onSuccess(int totalScore) {
+                int pointsToNextTier = RankUtils.pointsToNextTier(totalScore);
+
+                objectiveText.setText(pointsToNextTier);
+            }
+
+            @Override
+            public void onFailure() {
+                Log.e("RankingSystem", "Failed to retrieve total score");
+            }
+        });
 
         // Call the setupLineChart method
         setupLineChart(scoresList);

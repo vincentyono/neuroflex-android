@@ -144,7 +144,7 @@ public class MemoryGameActivity extends AppCompatActivity {
                         pairsMatched++;
 
                         if (pairsMatched == numPairs) {  // All pairs matched
-                            showSuccessDialog();
+//                            showSuccessDialog();
                             saveGameData(true);
                         }
                     } else {
@@ -217,7 +217,7 @@ public class MemoryGameActivity extends AppCompatActivity {
                 }
                 timer.setProgress(0);
                 // Handle completion of countdown
-                showTimeUpDialog();
+//                showTimeUpDialog();
                 saveGameData(false);
             }
         }.start();
@@ -259,7 +259,7 @@ public class MemoryGameActivity extends AppCompatActivity {
 
         // Assuming the gameIndex for memory is 1
         int gameIndex = 1;
-        ArrayList<Integer> scores = new ArrayList<>(); // No scores for memory, but we need to pass an empty list
+        List<Integer> scores = new ArrayList<>(); // No scores for memory, but we need to pass an empty list
 
         Log.d(TAG, "Saving game data with the following metrics:");
         Log.d(TAG, "Time taken: " + timeTakenSeconds);
@@ -286,7 +286,7 @@ public class MemoryGameActivity extends AppCompatActivity {
                                 Intent intent = new Intent(MemoryGameActivity.this, Result.class);
                                 intent.putExtra("score", currentScore);
                                 intent.putExtra("topScore", topScore);
-                                intent.putIntegerArrayListExtra("scoresList", scores);
+                                intent.putIntegerArrayListExtra("scoresList", (ArrayList<Integer>) scores);
                                 startActivity(intent);
                             }
 
