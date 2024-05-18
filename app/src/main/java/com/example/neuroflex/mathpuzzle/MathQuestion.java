@@ -8,6 +8,34 @@ public class MathQuestion {
     private int _c;
 
     public MathQuestion(Difficulty difficulty) {
+        this.generateQuestion(difficulty);
+    }
+
+    public String getQuestion() {
+        return String.format("%d %c %d", this._a, this._operator, this._b);
+    }
+
+    public int getAnswer() {
+        if(this._operator == '+') return this._a + this._b;
+        else if(this._operator == '-') return this._a - this._b;
+        else return this._a * this._b;
+    }
+
+    public void setC(int c) {
+        this._c = c;
+    }
+
+    public int getC() {
+        return this._c;
+    }
+
+    public Boolean verifyAnswer() {
+        if(this._operator == '+') return this._c == this._a + this._b;
+        else if(this._operator == '-') return this._c == this._a - this._b;
+        else  return this._c == this._a * this._b;
+    }
+
+    public void generateQuestion(Difficulty difficulty) {
         if(difficulty == Difficulty.EASY) {
             int a = this.getRandomNumber(1, 9);
             int b = this.getRandomNumber(1, 9);
@@ -27,28 +55,6 @@ public class MathQuestion {
             this._b = Math.min(a, b);
             this._operator = this.getRandomOperator();
         }
-    }
-
-    public String getQuestion() {
-        return String.format("%d %c %d", this._a, this._operator, this._b);
-    }
-
-    public int getAnswer() {
-        return this._c;
-    }
-
-    public void setC(int c) {
-        this._c = c;
-    }
-
-    public int getC() {
-        return this._c;
-    }
-
-    public Boolean verifyAnswer() {
-        if(this._operator == '+') return this._c == this._a + this._b;
-        else if(this._operator == '-') return this._c == this._a - this._b;
-        else  return this._c == this._a * this._b;
     }
 
     /*
