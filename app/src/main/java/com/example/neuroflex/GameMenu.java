@@ -33,6 +33,8 @@ public class GameMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle gameBundle = new Bundle();
                 gameBundle.putString(FirebaseAnalytics.Event.APP_OPEN, "math");
+
+                // Logs to firebase analytics
                 mFirebaseAnalytics.logEvent("math", gameBundle);
                 Log.d("FireBaseAnalytics", "Click math");
                 openGameModeSelectActivity("math");
@@ -44,6 +46,8 @@ public class GameMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle gameBundle = new Bundle();
                 gameBundle.putString(FirebaseAnalytics.Event.APP_OPEN, "memory");
+
+                // Logs to firebase analytics
                 mFirebaseAnalytics.logEvent("memory", gameBundle);
                 Log.d("FireBaseAnalytics", "Click memory");
                 openGameModeSelectActivity("memory");
@@ -55,6 +59,8 @@ public class GameMenu extends AppCompatActivity {
             public void onClick(View v) {
                 Bundle gameBundle = new Bundle();
                 gameBundle.putString(FirebaseAnalytics.Event.APP_OPEN, "language");
+
+                // Logs to firebase analytics
                 mFirebaseAnalytics.logEvent("language", gameBundle);
                 Log.d("FireBaseAnalytics", "Click language");
                 openGameModeSelectActivity("language");
