@@ -134,38 +134,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="25dp">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:src="@drawable/game_logic"
-                    android:id="@+id/imageViewGame4"
-                    android:layout_width="375dp"
-                    android:layout_height="150dp"
-                    android:background="@drawable/game_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:padding="4dp"
-                    android:text="@string/logic_text_view"
-                    android:textColor="@color/orange"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="@id/imageViewGame4"
-                    app:layout_constraintHorizontal_bias="0.056"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/imageViewGame4" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Additional content can be added here -->
+            <!-- More games can be added here -->
         </LinearLayout>
     </ScrollView>
 
