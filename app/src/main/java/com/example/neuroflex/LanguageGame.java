@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class LanguageGame extends AppCompatActivity {
 
     // Initializing text views and buttons
     private TextView questionTextView;
+    private ImageView pauseButton;
+    private ImageView helpButton;
     private Button[] answerButtons = new Button[4];
     private TextView scoreTextView;
 
@@ -60,6 +63,8 @@ public class LanguageGame extends AppCompatActivity {
     // Question counter variables
     private TextView questionCounterTextView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +72,8 @@ public class LanguageGame extends AppCompatActivity {
 
         // Set question view and buttons
         questionTextView = findViewById(R.id.questionTextView);
+        pauseButton = findViewById(R.id.pause_btn);
+        helpButton = findViewById(R.id.help_btn);
         answerButtons[0] = findViewById(R.id.answerButton1);
         answerButtons[1] = findViewById(R.id.answerButton2);
         answerButtons[2] = findViewById(R.id.answerButton3);
@@ -75,6 +82,30 @@ public class LanguageGame extends AppCompatActivity {
         // Set score and question counter view
         scoreTextView = findViewById(R.id.scoreTextView);
         questionCounterTextView = findViewById(R.id.questionsProgress);
+
+        // Pause and How to play button event listener
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PauseGame.class);
+                Bundle b = new Bundle();
+                b.putString("GAME_ACTIVITY", "LANGUAGE_GAME");
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
+
+        // Help Button
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
+                Bundle b = new Bundle();
+                b.putString("GAME_ACTIVITY", "LANGUAGE_GAME");
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
 
         // Get the difficulty level from the Intent
         difficultyLevel = getIntent().getStringExtra("DIFFICULTY_LEVEL");
@@ -207,7 +238,6 @@ public class LanguageGame extends AppCompatActivity {
         }.start();
     }
 
-    // Function to check the answer
     private void checkAnswer(int selectedAnswerIndex) {
         if (timer != null) {
             timer.cancel(); // Cancel the timer when an answer is selected
@@ -292,5 +322,33 @@ public class LanguageGame extends AppCompatActivity {
         String totalTimeString = String.format("%.2f", totalTimeInSeconds);
         return Double.parseDouble(totalTimeString);
     }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.timer.cancel();
+        this.timer = new CountDownTimer(remainingTime * 1000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                remainingTime = (int) (millisUntilFinished / 1000);
+                // Calculate progress percentage
+                int progress = (int) ((millisUntilFinished / 30000.0) * 100);
+                // Set progress to the ProgressBar
+                ProgressBar progressBar = findViewById(R.id.circleTimer);
+                progressBar.setProgress(progress);
+            }
 
+            public void onFinish() {
+                // Skip question if user doesn't answer on time
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(this.timer == null) return;
+        this.timer.start();
+    }
 }
