@@ -93,6 +93,9 @@ public class MathPuzzleActivity extends AppCompatActivity {
                             _correct++;
                             _answered++;
                             scoresList.add(_score);
+                            if(_answered == 10) {
+                                saveStatsToDB();
+                            }
                         }
                         else {
                             if(str.length() == Integer.toString(mathQuestion.getAnswer()).length()) {
@@ -100,6 +103,9 @@ public class MathPuzzleActivity extends AppCompatActivity {
                                 editText.setText("");
                                 textView.setText(mathQuestion.getQuestion());
                                 _answered++;
+                                if(_answered == 10) {
+                                    saveStatsToDB();
+                                }
                             }
                         }
                     }
@@ -183,9 +189,7 @@ public class MathPuzzleActivity extends AppCompatActivity {
 
             public void onFinish() {
                 // Skip question if user doesn't answer on time
-                Intent intent = new Intent(getApplicationContext(), Result.class);
 
-                startActivity(intent);
             }
         }.start();
     }
