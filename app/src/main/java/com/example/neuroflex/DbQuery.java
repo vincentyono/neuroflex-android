@@ -94,6 +94,34 @@ public class DbQuery {
                 });
     }
 
+    public static void updateStreak(String userId) {
+        g_firestore.collection("USERS").document(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    List<Map<String, Object>> dailyScores = (List<Map<String, Object>>) document.get("DAILY_SCORES");
+                    int newStreak = StreakHelper.calculateStreak(dailyScores);
+
+                    // Update Firestore with new streak
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("STREAK", newStreak);
+
+                    g_firestore.collection("USERS").document(userId).update(data)
+                            .addOnSuccessListener(aVoid -> {
+                                Log.d(TAG, "Streak updated: " + newStreak);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e(TAG, "Error updating streak", e);
+                            });
+                } else {
+                    Log.e(TAG, "No such document");
+                }
+            } else {
+                Log.e(TAG, "Error fetching user data", task.getException());
+            }
+        });
+    }
+
     public static void updateGameParams(int gameIndex, double accuracy, double speed, double time, int currentScore, MyCompleteListener completeListener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -127,6 +155,9 @@ public class DbQuery {
                 } else {
                     Log.e(TAG, "Error getting document: ", task.getException());
                 }
+
+                // After game completion logic
+                updateStreak(userId);
 
                 // Perform the update
                 performanceDoc.update(updates)
