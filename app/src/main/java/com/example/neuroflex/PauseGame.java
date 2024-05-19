@@ -15,6 +15,7 @@ public class PauseGame extends AppCompatActivity {
     private Button _restartButton;
     private Button _exitButton;
     private String _gameActivity;
+    private Switch _soundSwitch;
     private String _difficutly;
 
     @Override
@@ -28,6 +29,7 @@ public class PauseGame extends AppCompatActivity {
         this._howToPlayButton = findViewById(R.id.how_to_play_button);
         this._restartButton = findViewById(R.id.restart_button);
         this._exitButton = findViewById(R.id.exit_button);
+        this._soundSwitch = findViewById(R.id.sound_switch);
 
         this._resumeButton.setOnClickListener(new View.OnClickListener() {
             @Override
