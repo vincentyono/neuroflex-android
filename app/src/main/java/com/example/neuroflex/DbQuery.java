@@ -208,27 +208,13 @@ public class DbQuery {
                     public void onSuccess(Void unused) {
                         completeListener.onSuccess();
                     }
-                } else {
-                    Log.e(TAG, "Error getting document: ", task.getException());
-                }
-
-                // Perform the update
-                performanceDoc.update(updates)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                completeListener.onSuccess();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                completeListener.onFailure();
-                            }
-                        });
-            }
-        });
-
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
     }
 
     // Function to fetch user's total score
