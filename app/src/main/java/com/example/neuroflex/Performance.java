@@ -48,7 +48,7 @@ public class Performance extends AppCompatActivity {
             public void onSuccess(int totalScore) {
                 int pointsToNextTier = RankUtils.pointsToNextTier(totalScore);
 
-                objectiveText.setText(pointsToNextTier);
+                objectiveText.setText(String.valueOf(pointsToNextTier));
             }
 
             @Override

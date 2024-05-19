@@ -220,10 +220,10 @@ public class MainActivity extends AppCompatActivity {
                     currentPage = 0;
                 }
                 featuredRecyclerView.smoothScrollToPosition(currentPage++);
-                handler.postDelayed(this, 5000); // Scroll every 5 seconds
+                handler.postDelayed(this, 2000); // Scroll every 5 seconds
             }
         };
-        handler.postDelayed(autoScrollRunnable, 5000);
+        handler.postDelayed(autoScrollRunnable, 2000);
     }
 
     @Override
