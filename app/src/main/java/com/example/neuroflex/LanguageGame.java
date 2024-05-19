@@ -84,6 +84,7 @@ public class LanguageGame extends AppCompatActivity {
             }
         });
 
+        // Help Button
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

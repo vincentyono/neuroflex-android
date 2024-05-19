@@ -37,8 +37,6 @@ public class HowToPlayActivity extends AppCompatActivity {
         this._howToPlayContent = findViewById(R.id.how_to_play_content);
         this._finishButton = findViewById(R.id.finish_button);
 
-        Log.d("TEST", gameActivity);
-
         if (gameActivity != null) {
             Log.d("TEST", gameActivity);
 
