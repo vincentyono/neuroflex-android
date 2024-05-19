@@ -30,16 +30,19 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
+    // Firebase authentication and Firestore instances
     FirebaseAuth auth;
-    Button button;
     TextView textView;
     FirebaseUser user;
     FirebaseFirestore db;
 
+    // UI elements
+    Button button;
     private ImageView gameImage;
     private TextView gameTitle;
     private TextView gameDescription;
 
+    // RecyclerView elements
     private RecyclerView featuredRecyclerView;
     private FeaturedAdapter featuredAdapter;
     private LinearLayoutManager linearLayoutManager;
@@ -53,20 +56,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Firebase init
+        // nitialize Firebase auth and Firestore
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // Initialize UI elements
         // Header
         button =  findViewById(R.id.logout);
-//        textView = findViewById(R.id.user_details);
         TextView textViewName = findViewById(R.id.display_name);
 
         // Cards
         TextView textViewBrainScore = findViewById(R.id.brainScoreNum);
         TextView textViewStreak = findViewById(R.id.workoutStreakNum);
 
-        // Initialize UI elements
+        // Recommendation elements
         gameImage = findViewById(R.id.game_image);
         gameTitle = findViewById(R.id.game_title);
         gameDescription = findViewById(R.id.game_description);
@@ -82,7 +85,9 @@ public class MainActivity extends AppCompatActivity {
         // Get today's game pick
         fetchTodaysGamePick();
 
-        // Navigation
+        /*
+         * BOTTOM NAVIGATION BAR
+         */
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
@@ -112,12 +117,12 @@ public class MainActivity extends AppCompatActivity {
         // Fetch user details for display
         user = auth.getCurrentUser();
         if (user == null){
+            // Redirect to Login activity if user is not signed in
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
         } else {
-            // Display user details
-//            textView.setText(user.getEmail());
+            // Fetch and display user details from Firestore
 
             String userId = user.getUid();
 
@@ -134,10 +139,10 @@ public class MainActivity extends AppCompatActivity {
                                 Long streak = document.getLong("STREAK");
 
                                 if (totalScore != null) {
-                                    textViewBrainScore.setText(String.valueOf(totalScore));
+                                    textViewBrainScore.setText(String.valueOf(totalScore)); // Set the user's score to TextView
                                 }
                                 if (streak != null) {
-                                    textViewStreak.setText(String.valueOf(streak));
+                                    textViewStreak.setText(String.valueOf(streak)); // Set the user's streak to TextView
                                 }
 
                             } else {
@@ -149,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
 
-        // Logout
+        // Logout button
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Fetch today's game pick based on the day of the year. Shown under the 'Today's Game Pick' section.
     private void fetchTodaysGamePick() {
         // Get the day of the year
         Calendar calendar = Calendar.getInstance();
@@ -196,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Fetch featured items from Firestore. Shown under the 'Featured' section.
     private void fetchFeaturedItems() {
         db.collection("FEATURED").get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -211,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Start auto-scroll for the featured items RecyclerView
     private void startAutoScroll() {
         handler = new Handler();
         autoScrollRunnable = new Runnable() {
@@ -220,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     currentPage = 0;
                 }
                 featuredRecyclerView.smoothScrollToPosition(currentPage++);
-                handler.postDelayed(this, 2000); // Scroll every 5 seconds
+                handler.postDelayed(this, 2000); // Scroll every 2 seconds
             }
         };
         handler.postDelayed(autoScrollRunnable, 2000);
@@ -228,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        // Remove auto-scroll callbacks when the activity is destroyed
         super.onDestroy();
         if (handler != null && autoScrollRunnable != null) {
             handler.removeCallbacks(autoScrollRunnable);

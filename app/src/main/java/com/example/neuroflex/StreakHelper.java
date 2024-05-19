@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+// Class to calculate the user's streak
+// If the user plays at least one game each day, a streak is added
+// If the user misses a day on playing at least one game, the streak is reset to 0
 public class StreakHelper {
+
 
     public static String getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());

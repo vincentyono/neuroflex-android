@@ -34,14 +34,18 @@ import java.util.Random;
 public class DbQuery {
 
     private static final String TAG = "DbQuery";
-    private static FirebaseFirestore g_firestore = FirebaseFirestore.getInstance();
 
+    // Initializing Firestore instance
+    private static FirebaseFirestore g_firestore = FirebaseFirestore.getInstance();
+    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+    // Function to create user data in Firestore
     public static void createUserData(String email, String name, MyCompleteListener completeListener) {
         g_firestore = FirebaseFirestore.getInstance();
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // User data
+        // User data map
         Map<String, Object> userData = new ArrayMap<>();
         userData.put("EMAIL", email);
         userData.put("NAME", name);
@@ -94,6 +98,7 @@ public class DbQuery {
                 });
     }
 
+    // Function to update the user's streak based on daily scores
     public static void updateStreak(String userId) {
         g_firestore.collection("USERS").document(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -122,6 +127,7 @@ public class DbQuery {
         });
     }
 
+    // Function to update game parameters/performance of each user
     public static void updateGameParams(int gameIndex, double accuracy, double speed, double time, int currentScore, MyCompleteListener completeListener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -433,6 +439,7 @@ public class DbQuery {
         });
     }
 
+    // Function to fetch daily scores (scores obtained by a user per day)
     public static void getDailyScores(DailyScoresListener listener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         g_firestore.collection("USERS")
@@ -460,6 +467,7 @@ public class DbQuery {
                 });
     }
 
+    // Function to fetch average stats for a game
     public static void getAverageStats(int gameIndex, OnAverageStatsLoadedListener listener) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DocumentReference performanceDoc = g_firestore.collection("PERFORMANCE").document(userId);

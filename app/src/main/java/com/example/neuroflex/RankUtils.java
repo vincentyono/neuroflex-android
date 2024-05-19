@@ -1,6 +1,7 @@
 package com.example.neuroflex;
 
 public class RankUtils {
+    // Method to get the tier name based on the score
     public static String getTier(int score) {
         if (score <= 500) {
             return "Beginner";
@@ -19,6 +20,7 @@ public class RankUtils {
         }
     }
 
+    // Method to calculate the points needed to reach the next tier based on the current score
     public static int pointsToNextTier(int score) {
         if (score <= 500) {
             return 501 - score;

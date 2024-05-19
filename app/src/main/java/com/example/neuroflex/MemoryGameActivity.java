@@ -64,9 +64,13 @@ public class MemoryGameActivity extends AppCompatActivity {
                 break;
         }
 
+        // Initialize timer
         timer = findViewById(R.id.circleTimer);
+
+        // Initialize buttons
         initializeButtons();
 
+        // List of images to use for the cards
         List<Integer> images = new ArrayList<>();
         images.add(R.drawable.fruit_apple);
         images.add(R.drawable.fruit_banana);
@@ -79,6 +83,7 @@ public class MemoryGameActivity extends AppCompatActivity {
         images.add(R.drawable.fruit_watermelon);
         images.add(R.drawable.fruit_grapes);
 
+        // Determine the number of pairs based on difficulty level
         int numPairs;
         switch (difficultyLevel) {
             case "easy":
@@ -95,14 +100,17 @@ public class MemoryGameActivity extends AppCompatActivity {
                 break;
         }
 
+        // Select images for the game
         List<Integer> selectedImages = images.subList(0, numPairs);
         selectedImages.addAll(selectedImages); // Duplicate the images to create pairs
         Collections.shuffle(selectedImages);
 
+        // Variables to track the state of the game
         final int[] clicked = {0};
         final boolean[] turnOver = {false};
         final int[] lastClicked = {-1};
 
+        // Set up buttons with images and click listeners
         for (int i = 0; i < buttons.size(); i++) {
             Button button = buttons.get(i);
             button.setBackgroundResource(R.drawable.question_mark);
@@ -114,12 +122,13 @@ public class MemoryGameActivity extends AppCompatActivity {
                     return; // Prevent further actions if the game is completed
                 }
                 if (!timerStarted) {
-                    startCountdown();
+                    startCountdown(); // Start the countdown timer
                     timerStarted = true;
                     startTime = System.currentTimeMillis();
                 }
 
                 if (button.getText().equals("cardBack") && !turnOver[0]) {
+                    // Flip the card to show the image
                     flipCard(button, selectedImages.get(finalI));
                     button.setText(String.valueOf(selectedImages.get(finalI)));
                     if (clicked[0] == 0) {
@@ -127,16 +136,18 @@ public class MemoryGameActivity extends AppCompatActivity {
                     }
                     clicked[0]++;
                 } else if (!button.getText().equals("cardBack")) {
+                    // Flip the card back to hide the image
                     flipCard(button, R.drawable.question_mark);
                     button.setText("cardBack");
                     clicked[0]--;
                 }
 
-                attempts++;
+                attempts++; // Increment the attempts counter for each user flip
 
                 if (clicked[0] == 2) {
                     turnOver[0] = true;
                     if (button.getText().equals(buttons.get(lastClicked[0]).getText())) {
+                        // Match found
                         button.setClickable(false);
                         buttons.get(lastClicked[0]).setClickable(false);
                         turnOver[0] = false;
@@ -144,11 +155,12 @@ public class MemoryGameActivity extends AppCompatActivity {
                         pairsMatched++;
 
                         if (pairsMatched == numPairs) {  // All pairs matched
-//                            showSuccessDialog();
+//                          // Save game data indicating success
                             saveGameData(true);
                         }
                     } else {
                         handler.postDelayed(() -> {
+                            // Flip the cards back if they don't match
                             flipCard(button, R.drawable.question_mark);
                             button.setText("cardBack");
                             flipCard(buttons.get(lastClicked[0]), R.drawable.question_mark);
@@ -164,6 +176,7 @@ public class MemoryGameActivity extends AppCompatActivity {
         }
     }
 
+    // Initialize buttons for the game
     private void initializeButtons() {
         for (int i = 1; i <= 20; i++) {
             int resId = getResources().getIdentifier("imageButton" + i, "id", getPackageName());
@@ -174,6 +187,7 @@ public class MemoryGameActivity extends AppCompatActivity {
         }
     }
 
+    // Flip the card to show or hide the image
     private void flipCard(View view, int drawableId) {
         ObjectAnimator flipOut = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.flip_out);
         ObjectAnimator flipIn = (ObjectAnimator) AnimatorInflater.loadAnimator(this, R.animator.flip_in);
@@ -195,10 +209,12 @@ public class MemoryGameActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (countDownTimer != null) {
-            countDownTimer.cancel();
+            countDownTimer.cancel(); // Cancel the timer if the activity is destroyed
+
         }
     }
 
+    // Start the countdown timer
     private void startCountdown() {
         countDownTimer = new CountDownTimer(totalTime, interval) {
             public void onTick(long millisUntilFinished) {
@@ -206,7 +222,7 @@ public class MemoryGameActivity extends AppCompatActivity {
                     countDownTimer.cancel(); // Stop the timer if the game is completed
                     return;
                 }
-                // Update progress bar
+                // Update progress bar (timer display)
                 int progress = (int) (millisUntilFinished / (totalTime / 100));
                 timer.setProgress(progress);
             }
@@ -217,33 +233,12 @@ public class MemoryGameActivity extends AppCompatActivity {
                 }
                 timer.setProgress(0);
                 // Handle completion of countdown
-//                showTimeUpDialog();
                 saveGameData(false);
             }
         }.start();
     }
 
-    private void showTimeUpDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Time's Up!")
-                .setMessage("You didn't finish in time.")
-                .setNegativeButton("Exit", (dialog, which) -> {
-                    finish();  // Close the activity
-                })
-                .show();
-    }
-
-    private void showSuccessDialog() {
-        gameCompleted = true;
-        new AlertDialog.Builder(this)
-                .setTitle("Congratulations!")
-                .setMessage("You've successfully matched all pairs.")
-                .setNegativeButton("Exit", (dialog, which) -> {
-                    finish();
-                })
-                .show();
-    }
-
+    // Save game data and update the database
     private void saveGameData(boolean success) {
         long endTime = System.currentTimeMillis();
         long timeTakenMillis = endTime - startTime;

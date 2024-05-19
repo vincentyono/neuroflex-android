@@ -33,8 +33,7 @@ import java.util.regex.Pattern;
 
 public class Register extends AppCompatActivity {
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-
+    // UI elements
     TextInputEditText editTextName, editTextEmail, editTextPassword;
     Button buttonReg;
     FirebaseAuth mAuth;
@@ -45,6 +44,7 @@ public class Register extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
@@ -58,8 +58,11 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        // Initialize UI elements
         editTextName = findViewById(R.id.name);
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -67,6 +70,7 @@ public class Register extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
 
+        // Navigate to Login Activity when "loginNow" text is clicked
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,14 +80,17 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        // Register button click listener
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Get user input
                 String name, email, password;
                 name = String.valueOf(editTextName.getText());
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
+                // Validate input fields
                 if (TextUtils.isEmpty(name)){
                     Toast.makeText(Register.this, "Enter name", Toast.LENGTH_SHORT).show();
                     return;
@@ -107,17 +114,22 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
+                // Show progress bar when the db is being queried
                 progressBar.setVisibility(View.VISIBLE);
 
+                // Create user with email and password in db
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(Register.this, task -> {
+                            // Hide progress bar
                             progressBar.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 Toast.makeText(Register.this, "Account created.", Toast.LENGTH_SHORT).show();
+                                // If sign in succeeds, display a message to the user and create user data
                                 DbQuery.createUserData(email, name, new MyCompleteListener(){
 
                                     @Override
                                     public void onSuccess() {
+                                        // Navigate to Login Activity on success
                                         Intent intent = new Intent(getApplicationContext(), Login.class);
                                         startActivity(intent);
                                         finish();
@@ -125,6 +137,7 @@ public class Register extends AppCompatActivity {
 
                                     @Override
                                     public void onFailure() {
+                                        // Show error message on failure
                                         Toast.makeText(Register.this, "Something went wrong. Try again later!", Toast.LENGTH_SHORT).show();
                                     }
                                 });

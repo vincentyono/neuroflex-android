@@ -26,11 +26,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
 
+    // UI elements
     TextInputEditText editTextName, editTextEmail, editTextPassword;
     Button buttonLogin;
-    FirebaseAuth mAuth;
     ProgressBar progressBar;
     TextView textView;
+
+    // Firebase authentication
+    FirebaseAuth mAuth;
 
     @Override
     public void onStart() {
@@ -55,6 +58,7 @@ public class Login extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.registerNow);
 
+        // Set onClickListener for the "Register Now" TextView
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,13 +68,16 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        // Set onClickListener for the "Login" Button
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Get email and password input
                 String email, password;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
 
+                // Validate email and password input
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(Login.this, "Enter email", Toast.LENGTH_SHORT).show();
                     return;
@@ -84,19 +91,24 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
+                // Show progress bar as the database is being queried below
                 progressBar.setVisibility(View.VISIBLE);
 
+                // Sign in with Firebase Authentication
                 mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                // Hide progress bar when done
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Login successful.", Toast.LENGTH_SHORT).show();
+                                    // Login successful, navigate to MainActivity
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                     startActivity(intent);
                                     finish();
                                 } else {
+                                    // Handle login errors
                                     String errorMessage;
                                     try {
                                         throw task.getException();

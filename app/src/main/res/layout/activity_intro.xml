@@ -33,15 +33,7 @@
             android:textSize="43sp"
             />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonLoginGoogle"
-            android:layout_width="270dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/rounded_button_white"
-            android:text="@string/login_with_google"
-            android:textAllCaps="false"
-            android:textSize="15sp"/>
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonLogin"

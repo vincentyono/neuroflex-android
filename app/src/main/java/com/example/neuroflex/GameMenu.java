@@ -14,6 +14,7 @@ public class GameMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_menu);
 
+        // Initializing UI for bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_game);
 
@@ -44,7 +45,9 @@ public class GameMenu extends AppCompatActivity {
             }
         });
 
-        // Navigation
+        /*
+         * BOTTOM NAVIGATION BAR
+         */
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.bottom_home) {
@@ -69,6 +72,8 @@ public class GameMenu extends AppCompatActivity {
         });
     }
 
+    // Opens the GameModeSelect activity with the specified game type.
+    //@param gameType The type of game to be selected (e.g., "math", "memory", "language").
     private void openGameModeSelectActivity(String gameType) {
         Intent intent = new Intent(GameMenu.this, GameModeSelect.class);
         intent.putExtra("GAME_TYPE", gameType);
