@@ -133,8 +133,9 @@ public class Register extends AppCompatActivity {
                                     public void onSuccess() {
                                         // Firebase Analytics
                                         Bundle regBundle = new Bundle();
-                                        regBundle.putString(FirebaseAnalytics.Param.CHARACTER, email);
+                                        regBundle.putString(FirebaseAnalytics.Event.SIGN_UP, name);
                                         mFirebaseAnalytics.logEvent("sign_up", regBundle);
+                                        Log.d("FirebaseAnalytics", "log sign_up");
 
                                         // Navigate to Login Activity on success
                                         Intent intent = new Intent(getApplicationContext(), Login.class);

@@ -3,6 +3,7 @@ package com.example.neuroflex;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,8 +32,9 @@ public class GameMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bundle gameBundle = new Bundle();
-                gameBundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "math");
+                gameBundle.putString(FirebaseAnalytics.Event.APP_OPEN, "math");
                 mFirebaseAnalytics.logEvent("math", gameBundle);
+                Log.d("FireBaseAnalytics", "Click math");
                 openGameModeSelectActivity("math");
             }
         });
@@ -41,8 +43,9 @@ public class GameMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bundle gameBundle = new Bundle();
-                gameBundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "memory");
+                gameBundle.putString(FirebaseAnalytics.Event.APP_OPEN, "memory");
                 mFirebaseAnalytics.logEvent("memory", gameBundle);
+                Log.d("FireBaseAnalytics", "Click memory");
                 openGameModeSelectActivity("memory");
             }
         });
@@ -51,8 +54,9 @@ public class GameMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Bundle gameBundle = new Bundle();
-                gameBundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "language");
+                gameBundle.putString(FirebaseAnalytics.Event.APP_OPEN, "language");
                 mFirebaseAnalytics.logEvent("language", gameBundle);
+                Log.d("FireBaseAnalytics", "Click language");
                 openGameModeSelectActivity("language");
             }
         });

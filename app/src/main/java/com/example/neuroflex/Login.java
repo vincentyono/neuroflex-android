@@ -105,6 +105,10 @@ public class Login extends AppCompatActivity {
                                 // Hide progress bar when done
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
+                                    Bundle loginCountBundle = new Bundle();
+                                    loginCountBundle.putString(FirebaseAnalytics.Event.LOGIN, email);
+                                    mFirebaseAnalytics.logEvent("login", loginCountBundle);
+                                    Log.d("FirebaseAnalytics", "Log login");
                                     Toast.makeText(getApplicationContext(), "Login successful.", Toast.LENGTH_SHORT).show();
                                     // Login successful, navigate to MainActivity
                                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -123,11 +127,7 @@ public class Login extends AppCompatActivity {
                                         errorMessage = "Authentication failed.";
                                     }
                                     Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
-                                    Bundle loginCountBundle = new Bundle();
 
-                                    loginCountBundle.putString(FirebaseAnalytics.Param.CHARACTER, email);
-
-                                    mFirebaseAnalytics.logEvent("login", loginCountBundle);
 
                                 }
                             }

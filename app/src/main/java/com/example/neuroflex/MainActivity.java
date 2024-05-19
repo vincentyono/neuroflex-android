@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // nitialize Firebase auth and Firestore
+        // Initialize Firebase auth and Firestore
         auth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
