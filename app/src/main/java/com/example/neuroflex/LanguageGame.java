@@ -23,12 +23,21 @@ public class LanguageGame extends AppCompatActivity {
 
     private static final String TAG = "LanguageGame";
 
+    // Initializing text views and buttons
     private TextView questionTextView;
     private Button[] answerButtons = new Button[4];
+    private TextView scoreTextView;
 
+    // List of questions to be retrieved from the firestore
     private List<LangQuestion> questions = new ArrayList<LangQuestion>();
+
+    // To keep track of the current question
     private int currentQuestionIndex = 0;
+
+    // Difficulty level
     private String difficultyLevel;
+
+    // Collection name for storage when the game ends
     private String collectionName;
 
     // Timer variables
@@ -41,13 +50,12 @@ public class LanguageGame extends AppCompatActivity {
     private double accuracy = 0;
     private double speed = 0;
     private double time = 0;
-
     private long startTime;
     private int totalCorrect = 0;
     private int totalQuestions = 0;
 
+    // Array to keep track of scores for each question
     private ArrayList<Integer> scoresList = new ArrayList<>();
-    private TextView scoreTextView;
 
     // Question counter variables
     private TextView questionCounterTextView;
@@ -57,16 +65,21 @@ public class LanguageGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_game);
 
+        // Set question view and buttons
         questionTextView = findViewById(R.id.questionTextView);
         answerButtons[0] = findViewById(R.id.answerButton1);
         answerButtons[1] = findViewById(R.id.answerButton2);
         answerButtons[2] = findViewById(R.id.answerButton3);
         answerButtons[3] = findViewById(R.id.answerButton4);
+
+        // Set score and question counter view
         scoreTextView = findViewById(R.id.scoreTextView);
         questionCounterTextView = findViewById(R.id.questionsProgress);
 
         // Get the difficulty level from the Intent
         difficultyLevel = getIntent().getStringExtra("DIFFICULTY_LEVEL");
+
+        // Set collection name to retrieve questions (LANG_EASY, LANG_MEDIUM, LANG_HARD)
         collectionName = "LANG_" + difficultyLevel.toUpperCase();
 
         // Makes sure a new array is made everytime a new game is called
@@ -93,14 +106,18 @@ public class LanguageGame extends AppCompatActivity {
         }
     }
 
+    // Function to load the questions
     private void loadQuestion() {
         if (currentQuestionIndex < questions.size()) {
             // Reset the timer for each new question
             startTimer();
             startTime = System.currentTimeMillis();
 
+            // Get the question from the index
             LangQuestion currentQuestion = questions.get(currentQuestionIndex);
             questionTextView.setText(currentQuestion.getQuestionText());
+
+            // Set the buttons with the multiple choices of answers
             for (int i = 0; i < answerButtons.length; i++) {
                 answerButtons[i].setText(currentQuestion.getAnswers().get(i));
                 answerButtons[i].setBackgroundTintList(ColorStateList.valueOf(Color.LTGRAY));
@@ -119,6 +136,7 @@ public class LanguageGame extends AppCompatActivity {
             speed = calculateAverageSpeed();
             time = calculateTotalTimeInSeconds();
 
+            // Set the params for the DB update
             int gameIndex = 2;
             int currentScore = score;
             String gameMode = "language";
@@ -138,6 +156,8 @@ public class LanguageGame extends AppCompatActivity {
                                 @Override
                                 public void onSuccess() {
                                     Log.d(TAG, "Game data stored successfully");
+
+                                    // Pass data to the next pages
                                     Intent intent = new Intent(LanguageGame.this, Result.class);
                                     intent.putExtra("score", score);
                                     intent.putExtra("topScore", topScore);
@@ -163,6 +183,7 @@ public class LanguageGame extends AppCompatActivity {
         }
     }
 
+    // Function to start the timer
     private void startTimer() {
         if (timer != null) {
             timer.cancel();
@@ -186,12 +207,14 @@ public class LanguageGame extends AppCompatActivity {
         }.start();
     }
 
+    // Function to check the answer
     private void checkAnswer(int selectedAnswerIndex) {
         if (timer != null) {
             timer.cancel(); // Cancel the timer when an answer is selected
         }
 
         // Calculate the penalty based on time passed
+        // Scoring: 100 points for every correct answer -2 for every second that the user wastes
         int penalty = (30 - remainingTime) * TIME_PENALTY_PER_SECOND;
 
         for (int i = 0; i < answerButtons.length; i++) {
@@ -200,15 +223,34 @@ public class LanguageGame extends AppCompatActivity {
 
         int questionScore;
         LangQuestion currentQuestion = questions.get(currentQuestionIndex);
+
+        // Check if the answer is correct
         if (selectedAnswerIndex == currentQuestion.getCorrectAnswerIndex()) {
+            // Add to the total correct number
             totalCorrect++;
+
+            // Calculate score for this question
             questionScore = (100 - penalty);
+
+            // Add to total score
             score += questionScore;
+
+            // Add current score to the score list
             scoresList.add(questionScore);
+
+            // Set button to green
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
-        } else {
+        }
+
+        // If the answer is wrong, the user gets 0 points
+        else {
+            // Add 0 to the score list
             scoresList.add(0);
+
+            // Set wrong button to red
             answerButtons[selectedAnswerIndex].setBackgroundTintList(ColorStateList.valueOf(Color.RED));
+
+            // Set right button to green
             answerButtons[currentQuestion.getCorrectAnswerIndex()].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         }
         long endTime = System.currentTimeMillis();
