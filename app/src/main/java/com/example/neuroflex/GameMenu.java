@@ -6,14 +6,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 public class GameMenu extends AppCompatActivity {
 
+    private FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_menu);
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Initializing UI for bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_game);
@@ -27,6 +30,9 @@ public class GameMenu extends AppCompatActivity {
         imageViewGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle gameBundle = new Bundle();
+                gameBundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "math");
+                mFirebaseAnalytics.logEvent("math", gameBundle);
                 openGameModeSelectActivity("math");
             }
         });
@@ -34,6 +40,9 @@ public class GameMenu extends AppCompatActivity {
         imageViewGame2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle gameBundle = new Bundle();
+                gameBundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "memory");
+                mFirebaseAnalytics.logEvent("memory", gameBundle);
                 openGameModeSelectActivity("memory");
             }
         });
@@ -41,6 +50,9 @@ public class GameMenu extends AppCompatActivity {
         imageViewGame3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle gameBundle = new Bundle();
+                gameBundle.putString(FirebaseAnalytics.Param.ITEM_VARIANT, "language");
+                mFirebaseAnalytics.logEvent("language", gameBundle);
                 openGameModeSelectActivity("language");
             }
         });

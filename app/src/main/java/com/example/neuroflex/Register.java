@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -40,6 +41,7 @@ public class Register extends AppCompatActivity {
     FirebaseFirestore db;
     ProgressBar progressBar;
     TextView textView;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public void onStart() {
@@ -61,7 +63,7 @@ public class Register extends AppCompatActivity {
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         // Initialize UI elements
         editTextName = findViewById(R.id.name);
         editTextEmail = findViewById(R.id.email);
@@ -129,6 +131,11 @@ public class Register extends AppCompatActivity {
 
                                     @Override
                                     public void onSuccess() {
+                                        // Firebase Analytics
+                                        Bundle regBundle = new Bundle();
+                                        regBundle.putString(FirebaseAnalytics.Param.CHARACTER, email);
+                                        mFirebaseAnalytics.logEvent("sign_up", regBundle);
+
                                         // Navigate to Login Activity on success
                                         Intent intent = new Intent(getApplicationContext(), Login.class);
                                         startActivity(intent);

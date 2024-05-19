@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -34,6 +35,7 @@ public class Login extends AppCompatActivity {
 
     // Firebase authentication
     FirebaseAuth mAuth;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public void onStart() {
@@ -57,6 +59,7 @@ public class Login extends AppCompatActivity {
         buttonLogin = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.registerNow);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         // Set onClickListener for the "Register Now" TextView
         textView.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +123,12 @@ public class Login extends AppCompatActivity {
                                         errorMessage = "Authentication failed.";
                                     }
                                     Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                    Bundle loginCountBundle = new Bundle();
+
+                                    loginCountBundle.putString(FirebaseAnalytics.Param.CHARACTER, email);
+
+                                    mFirebaseAnalytics.logEvent("login", loginCountBundle);
+
                                 }
                             }
                         });
