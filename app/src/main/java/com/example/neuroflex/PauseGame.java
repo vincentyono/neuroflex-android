@@ -16,7 +16,7 @@ public class PauseGame extends AppCompatActivity {
     private Button _exitButton;
     private String _gameActivity;
     private Switch _soundSwitch;
-    private int _remainingTime;
+    private String _difficutly;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,32 +52,35 @@ public class PauseGame extends AppCompatActivity {
         this._restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent;
-                if(_gameActivity == "MATH_PUZZLE") {
-                    intent = new Intent(getApplicationContext(), MathPuzzleActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-                else if(_gameActivity == "LANGUAGE_GAME") {
-                    intent = new Intent(getApplicationContext(), LanguageGame.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-                else {
-                    intent = new Intent(getApplicationContext(), MemoryGameActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getApplicationContext(), GameModeSelect.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle b = new Bundle();
+                b.putString("GAME_TYPE", convertGameActivityValue(_gameActivity));
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
 
         this._exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finishAffinity();
+               Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+               intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+               startActivity(intent);
             }
         });
     }
 
-
+    private String convertGameActivityValue(String s) {
+        switch(s) {
+            case "MATH_PUZZLE":
+                return "math";
+            case "LANGUAGE_GAME":
+                return "language";
+            case "MEMORY_GAME":
+                return "memory";
+            default:
+                throw new IllegalArgumentException("Invalid Game Type");
+        }
+    }
 }
