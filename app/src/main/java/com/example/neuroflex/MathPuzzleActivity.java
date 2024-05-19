@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 public class MathPuzzleActivity extends AppCompatActivity {
     private static final String TAG = "MathPuzzle";
-    private ArrayList<MathQuestion> _mathQuestions;
     private ArrayList<TextView> _questions;
     private ArrayList<EditText> _answers;
     private TextView _questionNumber;
@@ -36,6 +35,8 @@ public class MathPuzzleActivity extends AppCompatActivity {
     private int _score;
     private Difficulty _difficulty;
     private ArrayList<Integer> scoresList;
+    private MathQuestion currentQuestion;
+    private long totalTime;  // Track total time for all questions
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class MathPuzzleActivity extends AppCompatActivity {
         this._difficulty = Difficulty.valueOf(getIntent().getStringExtra("DIFFICULTY_LEVEL").toUpperCase());
         this._pauseBtn = findViewById(R.id.pause_btn);
         this._helpBtn = findViewById(R.id.help_btn);
-        this._mathQuestions = this.generateQuestion(this._difficulty, 5);
         this._questionNumber = findViewById(R.id.question_number);
         this._scoreView = findViewById(R.id.score_value);
         this._score = 0;
@@ -53,6 +53,7 @@ public class MathPuzzleActivity extends AppCompatActivity {
         this._answered = 0;
         this._correct = 0;
         this.scoresList = new ArrayList<>();
+        this.totalTime = 0;
 
         this._questions = new ArrayList<>();
         this._questions.add(findViewById(R.id.question_1));
@@ -60,58 +61,9 @@ public class MathPuzzleActivity extends AppCompatActivity {
         this._answers = new ArrayList<>();
         this._answers.add(findViewById(R.id.answer_1));
 
-        for(int i = 0; i < this._questions.size(); i++) {
-            TextView textView = this._questions.get(i);
-            EditText editText = this._answers.get(i);
-            MathQuestion mathQuestion = this._mathQuestions.get(i);
-            textView.setText(mathQuestion.getQuestion());
-            editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String str = s.toString();
-                    if(!str.isEmpty()) {
-                        mathQuestion.setC(Integer.parseInt(str));
-                        if(mathQuestion.verifyAnswer()) {
-                            _score += (100 - (60 - _remainingTime));
-                            _scoreView.setText(Integer.toString(_score));
-                            mathQuestion.generateQuestion(_difficulty);
-                            editText.setText("");
-                            textView.setText(mathQuestion.getQuestion());
-                            _correct++;
-                            _answered++;
-                            scoresList.add(_score);
-                            if(_answered == 10) {
-                                saveStatsToDB();
-                            }
-                        }
-                        else {
-                            if(str.length() == Integer.toString(mathQuestion.getAnswer()).length()) {
-                                mathQuestion.generateQuestion(_difficulty);
-                                editText.setText("");
-                                textView.setText(mathQuestion.getQuestion());
-                                _answered++;
-                                if(_answered == 10) {
-                                    saveStatsToDB();
-                                }
-                            }
-                        }
-                    }
-
-                    _questionNumber.setText(_correct + "/" + _answered);
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-        }
+        // Initialize the first question
+        updateQuestionNumber();
+        generateNewQuestion();
 
         _pauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,31 +89,20 @@ public class MathPuzzleActivity extends AppCompatActivity {
         startTimer();
     }
 
+    @Override
     protected void onPause() {
         super.onPause();
         Log.d("GAME PAUSED", "Remaining Time: " + this._remainingTime);
 
-        this._timer.cancel();
-        this._timer = new CountDownTimer(_remainingTime * 1000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                _remainingTime = (int) (millisUntilFinished / 1000);
-                // Calculate progress percentage
-                int progress = (int) ((millisUntilFinished / 30000.0) * 100);
-                // Set progress to the ProgressBar
-                ProgressBar progressBar = findViewById(R.id.circleTimer);
-                progressBar.setProgress(progress);
-            }
-
-            public void onFinish() {
-                // Skip question if user doesn't answer on time
-                saveStatsToDB();
-            }
-        };
+        if (_timer != null) {
+            _timer.cancel();
+        }
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        this._timer.start();
+        startTimer();
     }
 
     private void startTimer() {
@@ -180,49 +121,116 @@ public class MathPuzzleActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
-                // Skip question if user doesn't answer on time
+                // Increment answered questions and add a score of 0 for skipped question
+                _answered++;
+                scoresList.add(0);
+                totalTime += 30000; // Add 30 seconds for the missed question
 
+                // Check if all questions are answered
+                if (isGameFinished()) {
+                    saveStatsToDB();
+                    return;
+                }
+
+                // Update the question number
+                updateQuestionNumber();
+
+                // Generate a new question based on difficulty
+                generateNewQuestion();
+
+                // Restart the timer for the next question
+                startTimer();
             }
         }.start();
     }
 
-    private ArrayList<MathQuestion> generateQuestion(Difficulty difficulty, int numberOfQuestions) {
-       ArrayList<MathQuestion> temp = new ArrayList<>();
+    private void generateNewQuestion() {
+        if (isGameFinished()) {
+            saveStatsToDB();
+            return;
+        }
 
-       for (int i = 0; i < numberOfQuestions; i++) {
-            temp.add(new MathQuestion(difficulty));
-       }
+        currentQuestion = new MathQuestion(_difficulty);
+        _questions.get(0).setText(currentQuestion.getQuestion());
+        _answers.get(0).setText("");
 
-       return temp;
+        // Remove any existing TextWatcher
+        if (_answers.get(0).getTag() instanceof TextWatcher) {
+            _answers.get(0).removeTextChangedListener((TextWatcher) _answers.get(0).getTag());
+        }
+
+        TextWatcher textWatcher = new TextWatcher() {
+            private long questionStartTime = System.currentTimeMillis();
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = s.toString();
+                if (!str.isEmpty()) {
+                    currentQuestion.setC(Integer.parseInt(str));
+                    if (currentQuestion.verifyAnswer()) {
+                        long questionEndTime = System.currentTimeMillis();
+                        int questionScore = 100 - (30 - _remainingTime) * 2;
+                        _score += questionScore;
+                        _scoreView.setText(Integer.toString(_score));
+                        _correct++;
+                        _answered++;
+                        scoresList.add(questionScore);
+                        totalTime += (questionEndTime - questionStartTime); // Time taken to answer this question
+                        if (isGameFinished()) {
+                            saveStatsToDB();
+                            return;
+                        }
+                        updateQuestionNumber();
+                        generateNewQuestion();
+                    } else {
+                        if (str.length() == Integer.toString(currentQuestion.getAnswer()).length()) {
+                            _answered++;
+                            scoresList.add(0);
+                            totalTime += 30000; // Assume max time if answer is wrong
+                            if (isGameFinished()) {
+                                saveStatsToDB();
+                                return;
+                            }
+                            updateQuestionNumber();
+                            generateNewQuestion();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+
+        _answers.get(0).addTextChangedListener(textWatcher);
+        _answers.get(0).setTag(textWatcher);
     }
 
-    public double calculateAccuracy() {
-        if (this._answered == 0) return 0;
-        double accuracy = (double)(this._correct / this._answered) * 100;
-        String s = String.format("%.2f", accuracy);
-        return Double.parseDouble(s);
+    private void updateQuestionNumber() {
+        _questionNumber.setText((_answered + 1) + "/10");
     }
-    public double calculateAverageSpeed() {
-        if(this._answered == 0) return 0;
-        double avg = (double)this._answered / 60;
-        String s = String.format("%.2f", avg);
-        return Double.parseDouble(s);
-    }
-    public double calculateTotalTimeInSeconds() {
-        return 60;
+
+    private boolean isGameFinished() {
+        return _answered == 10;
     }
 
     public void saveStatsToDB() {
+        // Calculate accuracy, speed, and time
         double accuracy = calculateAccuracy();
         double speed = calculateAverageSpeed();
         double time = calculateTotalTimeInSeconds();
 
-        int gameIndex = 2;
+        int gameIndex = 0;
         int currentScore = this._score;
         String gameMode = "math";
 
+        clearUI();
+
         // Updates game parameters
-        DbQuery.updateGameParams(gameIndex, (double) accuracy, (double) speed, (double) time, currentScore, new MyCompleteListener() {
+        DbQuery.updateGameParams(gameIndex, accuracy, speed, time, currentScore, new MyCompleteListener() {
             @Override
             public void onSuccess() {
                 // Gets the top score
@@ -234,10 +242,10 @@ public class MathPuzzleActivity extends AppCompatActivity {
                         // Stores the game data
                         DbQuery.storeGame(gameMode, _difficulty.name(), scoresList, new MyCompleteListener() {
                             @Override
-                            public void onSuccess() {
+                            public void onSuccess(){
                                 Log.d(TAG, "Game data stored successfully");
                                 Intent intent = new Intent(MathPuzzleActivity.this, Result.class);
-                                intent.putExtra("score", Integer.toString(_score));
+                                intent.putExtra("score", _score);
                                 intent.putExtra("topScore", topScore);
                                 intent.putIntegerArrayListExtra("scoresList", scoresList);
                                 startActivity(intent);
@@ -257,5 +265,31 @@ public class MathPuzzleActivity extends AppCompatActivity {
                 Log.d(TAG, "Failed to update game data");
             }
         });
+    }
+
+    private double calculateAccuracy() {
+        if (_answered == 0) return 0.0;
+        return (double) _correct / _answered * 100;
+    }
+
+    private double calculateAverageSpeed() {
+        if (_answered == 0) return 0.0;
+        double averageSpeedInSeconds = (double) totalTime / _answered / 1000.0;
+        return Math.round(averageSpeedInSeconds * 100.0) / 100.0; // Round to 2 decimal places
+    }
+
+    private double calculateTotalTimeInSeconds() {
+        return Math.round((double) totalTime / 1000.0 * 100.0) / 100.0; // Convert ms to seconds and round to 2 decimal places
+    }
+
+    private void clearUI() {
+        ProgressBar progressBar = findViewById(R.id.circleTimer);
+        progressBar.setProgress(0);
+
+        _questionNumber.setText("Quiz Over!");
+
+        // Clear question and answer fields
+        _questions.get(0).setText("");
+        _answers.get(0).setText("");
     }
 }
