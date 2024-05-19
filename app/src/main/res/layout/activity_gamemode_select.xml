@@ -197,9 +197,9 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- How to play Box -->
-    <LinearLayout
-        android:id="@+id/howToBox"
+    <!-- How to play Button -->
+    <Button
+        android:id="@+id/howToButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_below="@id/scoreObjective"
@@ -207,17 +207,12 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:background="@drawable/round_corners_outline"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="How to play"
-            android:textSize="22sp"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="20dp"/>
-
-    </LinearLayout>
+        android:text="How to play"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"/>
 
     <!-- Play Now Button -->
     <Button
@@ -229,7 +224,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
         android:text="Play Now"
-        android:layout_below="@id/howToBox"
+        android:layout_below="@id/howToButton"
         android:textSize="25sp"
         android:textColor="@android:color/black"
         android:backgroundTint="@android:color/white"/>
