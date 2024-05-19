@@ -117,15 +117,6 @@ public class GameModeSelect extends AppCompatActivity {
                 }
             }
         });
-
-        Button howToButton = findViewById(R.id.howToButton);
-        howToButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callHowTo();
-            }
-        });
-
     }
 
     // Function to select the difficulty
@@ -181,35 +172,6 @@ public class GameModeSelect extends AppCompatActivity {
         intent.putExtra("DIFFICULTY_LEVEL", selectedDifficulty);
         startActivity(intent);
     }
-
-    // Function to call how to play depending on the game mode
-    private void callHowTo() {
-        Intent howto;
-        Bundle b = new Bundle();
-        switch (selectedGameMode) {
-            case "math":
-                howto = new Intent(getApplicationContext(), HowToPlayActivity.class);
-                b.putString("GAME_ACTIVITY", "MATH_PUZZLE");
-                howto.putExtras(b);
-                startActivity(howto);
-                break; // Add break statement to prevent fall-through
-            case "memory":
-                howto = new Intent(getApplicationContext(), HowToPlayActivity.class);
-                b.putString("GAME_ACTIVITY", "MEMORY_GAME");
-                howto.putExtras(b);
-                startActivity(howto);
-                break; // Add break statement to prevent fall-through
-            case "language":
-                howto = new Intent(getApplicationContext(), HowToPlayActivity.class);
-                b.putString("GAME_ACTIVITY", "LANGUAGE_GAME");
-                howto.putExtras(b);
-                startActivity(howto);
-                break; // Add break statement to prevent fall-through
-            default:
-                throw new IllegalArgumentException("Unexpected game type: " + selectedGameMode);
-        }
-    }
-
 
     // Capitalizes the first letter for text views
     private String capitalizeFirstLetter(String str) {

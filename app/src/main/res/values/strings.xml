@@ -43,26 +43,10 @@
     <string name="text_here">Text here</string>
     <string name="image_of_the_game">Image of the game</string>
     <string name="image_of_the_article">image of the article</string>
-    <string name="next_button">Next</string>
-    <string name="finish_button">Finish</string>
-    <string name="resume_button">Resume</string>
-    <string name="how_to_play_button">How to play</string>
-    <string name="restart_button">Restart</string>
-    <string name="exit_button">Exit</string>
-    <string name="sound_label">Sound</string>
-    <string name="game_paused_title">Game Paused</string>
-    <string name="how_to_play_title">How to Play</string>
-    <string name="how_to_play_content">How to play, example</string>
     <string-array name="game_modes">
         <item>Math</item>
         <item>Memory</item>
         <item>Language</item>
     </string-array>
-    <string name="how_to_play_math">
 
-    </string>
-    <string name="how_to_play_lang">
-    </string>
-    <string name="how_to_play_mem">
-    </string>
 </resources>
