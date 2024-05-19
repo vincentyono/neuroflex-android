@@ -56,17 +56,9 @@ public class MathPuzzleActivity extends AppCompatActivity {
 
         this._questions = new ArrayList<>();
         this._questions.add(findViewById(R.id.question_1));
-        this._questions.add(findViewById(R.id.question_2));
-        this._questions.add(findViewById(R.id.question_3));
-        this._questions.add(findViewById(R.id.question_4));
-        this._questions.add(findViewById(R.id.question_5));
 
         this._answers = new ArrayList<>();
         this._answers.add(findViewById(R.id.answer_1));
-        this._answers.add(findViewById(R.id.answer_2));
-        this._answers.add(findViewById(R.id.answer_3));
-        this._answers.add(findViewById(R.id.answer_4));
-        this._answers.add(findViewById(R.id.answer_5));
 
         for(int i = 0; i < this._questions.size(); i++) {
             TextView textView = this._questions.get(i);
