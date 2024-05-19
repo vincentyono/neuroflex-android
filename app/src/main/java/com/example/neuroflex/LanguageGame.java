@@ -250,4 +250,5 @@ public class LanguageGame extends AppCompatActivity {
         String totalTimeString = String.format("%.2f", totalTimeInSeconds);
         return Double.parseDouble(totalTimeString);
     }
+
 }
