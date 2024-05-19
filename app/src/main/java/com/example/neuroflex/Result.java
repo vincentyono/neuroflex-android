@@ -12,9 +12,12 @@ import java.util.ArrayList;
 
 public class Result extends AppCompatActivity {
 
+    // Initialize text views and buttons
     private TextView textScoreNumber;
     private TextView textBestNum;
-    private Button btnNext; // Add Button reference
+    private Button btnNext;
+
+    // List of scores for each question from the game
     private ArrayList<Integer> scoresList;
 
     @Override
@@ -29,8 +32,14 @@ public class Result extends AppCompatActivity {
 
         // Get score and top score from intent extras
         Intent intent = getIntent();
+
+        // Score from the game
         int score = intent.getIntExtra("score", 0);
+
+        // User's top score for the game
         int topScore = intent.getIntExtra("topScore", 0);
+
+        // Score for each question of the game
         scoresList = intent.getIntegerArrayListExtra("scoresList");
 
         // Update TextViews with new values
@@ -43,6 +52,8 @@ public class Result extends AppCompatActivity {
             public void onClick(View v) {
                 // Start Performance activity
                 Intent performanceIntent = new Intent(Result.this, Performance.class);
+
+                // Pass on data from previous page (game)
                 performanceIntent.putExtra("score", score);
                 performanceIntent.putIntegerArrayListExtra("scoresList", scoresList);
                 startActivity(performanceIntent);

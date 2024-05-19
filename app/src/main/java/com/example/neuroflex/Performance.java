@@ -31,15 +31,21 @@ public class Performance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_performance);
 
+        // Initialize buttons and views
         btnFinish = findViewById(R.id.btnNext);
         scoreText = findViewById(R.id.scoreView);
         lineChart = findViewById(R.id.lineChart);
         objectiveText = findViewById(R.id.objectiveTextView);
 
         Intent intent = getIntent();
+
+        // Get list of scores for each question
         ArrayList<Integer> scoresList = intent.getIntegerArrayListExtra("scoresList");
+
+        // Get score from the game
         int score = intent.getIntExtra("score", 0);
 
+        // Set the score text to the score
         scoreText.setText(String.valueOf(score));
 
         // Setting objective text based on rank
@@ -58,6 +64,7 @@ public class Performance extends AppCompatActivity {
         });
 
         // Call the setupLineChart method
+        // Shows the score evolution (how the points progress over the questions in the last game)
         setupLineChart(scoresList);
 
         btnFinish.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +77,11 @@ public class Performance extends AppCompatActivity {
         });
     }
 
+    // Function to set up the line chart
     private void setupLineChart(ArrayList<Integer> scoresList) {
         List<Entry> entries = new ArrayList<>();
+
+        // Check if score list is null
         if (scoresList != null) {
             for (int i = 0; i < scoresList.size(); i++) {
                 entries.add(new Entry(i, scoresList.get(i)));
