@@ -132,6 +132,7 @@ public class MemoryGameActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
                 Bundle b = new Bundle();
                 b.putString("GAME_ACTIVITY", "MEMORY_GAME");
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });
