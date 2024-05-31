@@ -30,14 +30,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class LoginTest {
+public class ForgetPasswordTest {
 
     @Rule
     public ActivityScenarioRule<IntroActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(IntroActivity.class);
 
     @Test
-    public void loginTest() {
+    public void forgetPasswordTest() {
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
@@ -47,7 +47,6 @@ public class LoginTest {
             e.printStackTrace();
         }
 
-        // Test login with email button
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.buttonLogin), withText("Login with email"),
                         childAtPosition(
@@ -67,16 +66,16 @@ public class LoginTest {
             e.printStackTrace();
         }
 
-        // Test register here link
-        ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.registerNow), withText("Don't have an account yet? Register here"),
+        // Test forgot password button
+        ViewInteraction materialTextView3 = onView(
+                allOf(withId(R.id.forgotPassword), withText("Forgot password"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                7),
+                                5),
                         isDisplayed()));
-        materialTextView.perform(click());
+        materialTextView3.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -87,16 +86,36 @@ public class LoginTest {
             e.printStackTrace();
         }
 
-        // Test login here link
-        ViewInteraction materialTextView2 = onView(
-                allOf(withId(R.id.loginNow), withText("Already have an account? Login here"),
+        // Test back to login button
+        ViewInteraction materialTextView4 = onView(
+                allOf(withId(R.id.backToLogin), withText("Back to login"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                7),
+                                5),
                         isDisplayed()));
-        materialTextView2.perform(click());
+        materialTextView4.perform(click());
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Test forgot password button
+        ViewInteraction materialTextView5 = onView(
+                allOf(withId(R.id.forgotPassword), withText("Forgot password"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        materialTextView5.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -109,7 +128,7 @@ public class LoginTest {
 
         // Test email field
         ViewInteraction textInputEditText = onView(
-                allOf(withId(R.id.email),
+                allOf(withId(R.id.emailForgotPassword),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.emailLayout),
@@ -119,34 +138,23 @@ public class LoginTest {
         textInputEditText.perform(click());
 
         ViewInteraction textInputEditText2 = onView(
-                allOf(withId(R.id.email),
+                allOf(withId(R.id.emailForgotPassword),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.emailLayout),
                                         0),
                                 0),
                         isDisplayed()));
-        textInputEditText2.perform(replaceText("espressotest@email.com"), closeSoftKeyboard());
+        textInputEditText2.perform(replaceText("espressotesting@email.com"), closeSoftKeyboard());
 
-        // Test password field
-        ViewInteraction textInputEditText3 = onView(
-                allOf(withId(R.id.password),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.passwordLayout),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textInputEditText3.perform(replaceText("espressoTest123"), closeSoftKeyboard());
-
-        // Test login button
+        // Test send button
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.btn_login), withText("Login"),
+                allOf(withId(R.id.btn_reset), withText("Send"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                6),
+                                4),
                         isDisplayed()));
         appCompatButton2.perform(click());
     }

@@ -48,6 +48,7 @@ public class CreateAccountTest {
             e.printStackTrace();
         }
 
+        // Check create account button
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.buttonReg), withText("Create account"),
                         childAtPosition(
@@ -67,6 +68,29 @@ public class CreateAccountTest {
             e.printStackTrace();
         }
 
+        // Test login here link
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(R.id.loginNow), withText("Already have an account? Login here"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                7),
+                        isDisplayed()));
+        materialTextView2.perform(click());
+
+        // Test register here link
+        ViewInteraction materialTextView = onView(
+                allOf(withId(R.id.registerNow), withText("Don't have an account yet? Register here"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                7),
+                        isDisplayed()));
+        materialTextView.perform(click());
+
+        // Test name field
         ViewInteraction textInputEditText = onView(
                 allOf(withId(R.id.name),
                         childAtPosition(
@@ -77,6 +101,7 @@ public class CreateAccountTest {
                         isDisplayed()));
         textInputEditText.perform(replaceText("espresso test"), closeSoftKeyboard());
 
+        // Test email field
         ViewInteraction textInputEditText2 = onView(
                 allOf(withId(R.id.email),
                         childAtPosition(
@@ -87,6 +112,7 @@ public class CreateAccountTest {
                         isDisplayed()));
         textInputEditText2.perform(replaceText("espressotest@email.com"), closeSoftKeyboard());
 
+        // Test password field
         ViewInteraction textInputEditText3 = onView(
                 allOf(withId(R.id.password),
                         childAtPosition(
@@ -107,6 +133,7 @@ public class CreateAccountTest {
                         isDisplayed()));
         textInputEditText4.perform(pressImeActionButton());
 
+        // Test create account button
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.btn_register), withText("Create an account"),
                         childAtPosition(
