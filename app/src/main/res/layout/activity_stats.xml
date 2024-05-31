@@ -77,7 +77,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_alignParentStart="true"
-            android:entries="@array/game_modes" />
+            android:entries="@array/game_modes"
+            android:minHeight="48dp"
+            android:background="?attr/selectableItemBackground"/>
 
     </LinearLayout>
 
@@ -89,7 +91,6 @@
         android:text="Your Performance in Each Game"
         android:textSize="12sp"
         android:textColor="@android:color/darker_gray"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp" />
 
@@ -99,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/gameStatsText"
         android:orientation="vertical"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="35dp"
         android:layout_marginEnd="35dp">
 
@@ -113,11 +114,11 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:textSize="15sp"
-                android:textColor="@android:color/black"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.3"
                 android:text="Accuracy"
-                android:layout_marginEnd="8dp" />
+                android:textColor="@android:color/black"
+                android:textSize="15sp" />
 
             <com.github.mikephil.charting.charts.HorizontalBarChart
                 android:id="@+id/accuracyChart"
@@ -138,7 +139,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25"
+                android:layout_weight="0.3"
                 android:textSize="15sp"
                 android:textColor="@android:color/black"
                 android:text="Speed"
@@ -163,7 +164,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25"
+                android:layout_weight="0.3"
                 android:textSize="15sp"
                 android:textColor="@android:color/black"
                 android:text="Time"
