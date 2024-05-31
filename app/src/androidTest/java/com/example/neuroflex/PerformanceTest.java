@@ -1,25 +1,26 @@
 package com.example.neuroflex;
 
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.test.espresso.DataInteraction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -34,14 +35,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class GameMenuTest {
+public class PerformanceTest {
 
     @Rule
     public ActivityScenarioRule<IntroActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(IntroActivity.class);
 
     @Test
-    public void gameMenuTest() {
+    public void performanceTest() {
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.buttonLogin), withText("Login with email"),
                         childAtPosition(
@@ -63,6 +64,16 @@ public class GameMenuTest {
         textInputEditText.perform(replaceText("espressotest@email.com"), closeSoftKeyboard());
 
         ViewInteraction textInputEditText2 = onView(
+                allOf(withId(R.id.email), withText("espressotest@email.com"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.emailLayout),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textInputEditText2.perform(pressImeActionButton());
+
+        ViewInteraction textInputEditText3 = onView(
                 allOf(withId(R.id.password),
                         childAtPosition(
                                 childAtPosition(
@@ -70,9 +81,9 @@ public class GameMenuTest {
                                         0),
                                 0),
                         isDisplayed()));
-        textInputEditText2.perform(replaceText("espressoTest123"), closeSoftKeyboard());
+        textInputEditText3.perform(replaceText("espressoTest123"), closeSoftKeyboard());
 
-        ViewInteraction textInputEditText3 = onView(
+        ViewInteraction textInputEditText4 = onView(
                 allOf(withId(R.id.password), withText("espressoTest123"),
                         childAtPosition(
                                 childAtPosition(
@@ -80,7 +91,7 @@ public class GameMenuTest {
                                         0),
                                 0),
                         isDisplayed()));
-        textInputEditText3.perform(pressImeActionButton());
+        textInputEditText4.perform(pressImeActionButton());
 
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.btn_login), withText("Login"),
@@ -96,118 +107,84 @@ public class GameMenuTest {
         // The recommended way to handle such scenarios is to use Espresso idling resources:
         // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
-            Thread.sleep(7000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         ViewInteraction bottomNavigationItemView = onView(
-                allOf(withId(R.id.bottom_game), withContentDescription("Game"),
+                allOf(withId(R.id.bottom_stats), withContentDescription("Stats"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.bottomNavigation),
                                         0),
-                                1),
+                                2),
                         isDisplayed()));
         bottomNavigationItemView.perform(click());
 
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.imageViewGame),
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.gameSpinner),
                         childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.content_layout),
-                                        1),
-                                0)));
-        appCompatImageView.perform(scrollTo(), click());
-
-        pressBack();
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction appCompatImageView2 = onView(
-                allOf(withId(R.id.imageViewGame2),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.content_layout),
-                                        2),
-                                0)));
-        appCompatImageView2.perform(scrollTo(), click());
-
-        pressBack();
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction appCompatImageView3 = onView(
-                allOf(withId(R.id.imageViewGame3),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.content_layout),
-                                        3),
-                                0)));
-        appCompatImageView3.perform(scrollTo(), click());
-
-        pressBack();
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction bottomNavigationItemView2 = onView(
-                allOf(withId(R.id.bottom_home), withContentDescription("Home"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.bottomNavigation),
-                                        0),
-                                0),
-                        isDisplayed()));
-        bottomNavigationItemView2.perform(click());
-
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.logout), withText("Logout"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.content_layout),
-                                        0),
+                                allOf(withId(R.id.gameModeSelector),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.RelativeLayout")),
+                                                2)),
                                 1),
                         isDisplayed()));
-        appCompatButton3.perform(click());
+        appCompatSpinner.perform(click());
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(1);
+        appCompatCheckedTextView.perform(click());
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction appCompatSpinner2 = onView(
+                allOf(withId(R.id.gameSpinner),
+                        childAtPosition(
+                                allOf(withId(R.id.gameModeSelector),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.RelativeLayout")),
+                                                2)),
+                                1),
+                        isDisplayed()));
+        appCompatSpinner2.perform(click());
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        DataInteraction appCompatCheckedTextView2 = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(2);
+        appCompatCheckedTextView2.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
