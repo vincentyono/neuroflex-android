@@ -115,6 +115,7 @@ public class MemoryGameActivity extends AppCompatActivity {
 
         pauseButton = findViewById(R.id.pause_btn);
         helpButton = findViewById(R.id.help_btn);
+
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +133,7 @@ public class MemoryGameActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), HowToPlayActivity.class);
                 Bundle b = new Bundle();
                 b.putString("GAME_ACTIVITY", "MEMORY_GAME");
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });
