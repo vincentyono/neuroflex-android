@@ -183,6 +183,7 @@ public class MemoryGameActivity extends AppCompatActivity {
 
                         if (pairsMatched == numPairs) {  // All pairs matched
 //                          // Save game data indicating success
+                            gameCompleted = true;
                             saveGameData(true);
                         }
                     } else {
