@@ -115,6 +115,7 @@ public class MemoryGameActivity extends AppCompatActivity {
 
         pauseButton = findViewById(R.id.pause_btn);
         helpButton = findViewById(R.id.help_btn);
+
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
