@@ -4,20 +4,16 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.intent.Intents.getIntents;
-import static androidx.test.espresso.intent.Intents.intended;
+
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.MatcherAssert.assertThat;
+
 import static org.hamcrest.core.AllOf.allOf;
 
-import android.app.Activity;
-import android.app.Instrumentation;
+
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.runner.intent.IntentCallback;
-import androidx.test.runner.intent.IntentMonitor;
 
 import org.junit.Rule;
 import org.junit.Test;

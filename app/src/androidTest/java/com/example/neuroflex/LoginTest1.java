@@ -11,7 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -70,5 +69,6 @@ public class LoginTest1 {
         }
 
         onView(allOf(withText("Welcome,"))).check(matches(isDisplayed()));
+        onView(withId(R.id.logout)).perform(click());
     }
 }
